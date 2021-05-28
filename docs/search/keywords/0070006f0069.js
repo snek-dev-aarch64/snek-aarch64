@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("poi",["Function"],[["point",,[[,,,,0,"File:app.s:point"]]]]);

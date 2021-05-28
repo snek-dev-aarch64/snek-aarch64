@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixIndexLoaded([]);
+﻿NDSearch.OnPrefixIndexLoaded(["pix","poi"]);
