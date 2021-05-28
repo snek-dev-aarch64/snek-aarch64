@@ -6,11 +6,8 @@
 .equ MAX_WIDTH,         SCREEN_WIDTH / SCALE_FACTOR - 1
 .equ MAX_HEIGHT,        SCREEN_HEIGHT / SCALE_FACTOR - 1
 
-.equ BLACK, 0x00000000
-.equ WHITE, 0x00FFFFFF
-.equ GB_GREEN, 0x00CADC9F
-
-.equ BACKGROUND, GB_GREEN
+.equ BLACK,     0x00000000
+.equ WHITE,     0x00FFFFFF
 
 .text
 .globl main
@@ -18,7 +15,7 @@ main:
     mov x20, x0 /* FRAMEBUFFER */
 
     mov x0, x20
-    mov w1, WHITE
+    mov w3, WHITE
     bl init_screen
 
     mov x0, x20
@@ -38,8 +35,6 @@ main:
 InfLoop:
     b InfLoop
 
-error:
-    mov x0, #-1
 
 /*
     Subroutine: pixel
@@ -124,36 +119,39 @@ _point:
 
     Params:
         x0 - framebuffer
-        w1 - color
+        w3 - color
 
     Notes:
         The point should be before (MAX_WIDTH, MAX_HEIGHT)
 */
 init_screen:
-    mov x8, SCREEN_WIDTH  /* x max */
-    mov x9, SCREEN_HEIGHT /* y max */
-    sub x9, x9, #1
+    sub sp, sp, 24
+    str x19, [sp, 16]
+    str x20, [sp, 8]
+    str lr,  [sp]
 
-    sub sp, sp, #8 /* store lr from call */
-    str x30, [sp]
+    mov x19, SCREEN_WIDTH
 
 init_loopx:
-    sub x8, x8, #1
-    cbz x8, _init_screen
+    mov x20, SCREEN_HEIGHT
+    sub x20, x20, 1
+    sub x19, x19, 1
+    cbz x19, _init_screen
 
 init_loopy:
-    cbz x9, init_loopx
+    cbz x20, init_loopx
     
-    mov x1, x8
-    mov x2, x9
-    mov w3, w1
+    mov x1, x19
+    mov x2, x20
     bl pixel
 
-    sub x9, x9, #1
+    sub x20, x20, 1
     b init_loopy
 
 _init_screen:
-    ldr x30, [sp]   /* restore lr */
-    add sp, sp, #8
+    ldr lr,  [sp]
+    ldr x20, [sp, 8]
+    ldr x19, [sp, 16]
+    add sp, sp, 24
 
     ret
