@@ -18,8 +18,8 @@ kernel8.img : memmap $(ASM_OBJS)
 
 run : all
 	qemu-system-aarch64 -M raspi3 -kernel kernel8.img -serial stdio
-	
+
 .PHONY: clean
 clean :
-	-rm -f *.o memory_map.txt kernel8.list kernel8.img kernel8.elf
+	-rm -f $(ASM_OBJS) memory_map.txt kernel8.list kernel8.img kernel8.elf
 
