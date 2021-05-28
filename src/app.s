@@ -8,11 +8,18 @@
 
 .equ BLACK, 0x00000000
 .equ WHITE, 0x00FFFFFF
+.equ GB_GREEN, 0x00CADC9F
+
+.equ BACKGROUND, GB_GREEN
 
 .text
 .globl main
 main:
     mov x20, x0 /* FRAMEBUFFER */
+
+    mov x0, x20
+    mov w1, WHITE
+    bl init_screen
 
     mov x0, x20
     mov x1, MAX_WIDTH
@@ -73,8 +80,6 @@ _pixel:
 */
 point:
     mov x8, SCALE_FACTOR
-    mov x9, MAX_WIDTH
-    mov x10, MAX_HEIGHT
 
     mul x9, x1, x8  /* x min */
     add x10, x9, x8 /* x max */
@@ -106,6 +111,48 @@ point_loopy:
     b point_loopy
 
 _point:
+    ldr x30, [sp]   /* restore lr */
+    add sp, sp, #8
+
+    ret
+
+/*
+    Subroutine: init_screen
+
+    Brief:
+        Draw a point into the framebuffer based on the scale factor
+
+    Params:
+        x0 - framebuffer
+        w1 - color
+
+    Notes:
+        The point should be before (MAX_WIDTH, MAX_HEIGHT)
+*/
+init_screen:
+    mov x8, SCREEN_WIDTH  /* x max */
+    mov x9, SCREEN_HEIGHT /* y max */
+    sub x9, x9, #1
+
+    sub sp, sp, #8 /* store lr from call */
+    str x30, [sp]
+
+init_loopx:
+    sub x8, x8, #1
+    cbz x8, _init_screen
+
+init_loopy:
+    cbz x9, init_loopx
+    
+    mov x1, x8
+    mov x2, x9
+    mov w3, w1
+    bl pixel
+
+    sub x9, x9, #1
+    b init_loopy
+
+_init_screen:
     ldr x30, [sp]   /* restore lr */
     add sp, sp, #8
 
