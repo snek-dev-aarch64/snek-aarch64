@@ -88,7 +88,7 @@ point:
     str x21, [sp, 24]
     str x22, [sp, 16]
     str x23, [sp, 8]
-    str x30, [sp]
+    str lr,  [sp]
 
     mov x19, SCALE_FACTOR
 
@@ -110,14 +110,14 @@ point_loopy:
     bl pixel
 
     add x22, x22, 1
-    cmp x22, x21
+    cmp x22, x23
     ble point_loopy
 
     add x20, x20, 1
     b point_loopx
 
 _point:
-    ldr x30, [sp]
+    ldr lr,  [sp]
     ldr x23, [sp, 8]
     ldr x22, [sp, 16]
     ldr x21, [sp, 24]
@@ -150,7 +150,6 @@ init_screen_loopx:
 
     mov x20, SCREEN_HEIGHT
 init_screen_loopy:
-
     mov x1, x19
     mov x2, x20
     bl pixel
