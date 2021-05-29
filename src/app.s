@@ -1,7 +1,7 @@
 
 .equ SCREEN_WIDTH, 		640
 .equ SCREEN_HEIGHT,		480
-.equ SCALE_FACTOR,      10
+.equ SCALE_FACTOR,      20
 .equ BITS_PER_PIXEL,  	32
 .equ MAX_WIDTH,         SCREEN_WIDTH / SCALE_FACTOR - 1
 .equ MAX_HEIGHT,        SCREEN_HEIGHT / SCALE_FACTOR - 1
@@ -82,49 +82,48 @@ _pixel:
         The point coords should be choosen from 0,0 to MAX_WIDTH,MAX_HEIGHT
 */
 point:
-    sub sp, sp, 48
-    str x19, [sp, 32]
-    str x20, [sp, 24]
-    str x21, [sp, 16]
-    str x22, [sp, 8]
+    sub sp, sp, 64
+    str x19, [sp, 40]
+    str x20, [sp, 32]
+    str x21, [sp, 24]
+    str x22, [sp, 16]
+    str x23, [sp, 8]
     str x30, [sp]
 
     mov x19, SCALE_FACTOR
 
     mul x20, x1, x19  /* x min */
     add x21, x20, x19 /* x max */
-    sub x20, x20, 1
 
-    mul x22, x2 , x19 /* y min */
-    add x12, x22, x19 /* y max */
-    mov x13, x22      /* y temp */
-
+    mul x22, x2, x19  /* y min */
+    add x23, x22, x19 /* y max */
+    mov x19, x22      /* y temp */
 
 point_loopx:
-    add x20, x20, 1
     cmp x20, x21
-    beq _point
+    bgt _point
 
-    mov x22, x13
-
+    mov x22, x19
 point_loopy:
-    cmp x22, x12
-    beq point_loopx
-
     mov x1, x20
     mov x2, x22
     bl pixel
 
     add x22, x22, 1
-    b point_loopy
+    cmp x22, x21
+    ble point_loopy
+
+    add x20, x20, 1
+    b point_loopx
 
 _point:
     ldr x30, [sp]
-    ldr x22, [sp, 8]
-    ldr x21, [sp, 16]
-    ldr x20, [sp, 24]
-    ldr x19, [sp, 32]
-    add sp, sp, 48
+    ldr x23, [sp, 8]
+    ldr x22, [sp, 16]
+    ldr x21, [sp, 24]
+    ldr x20, [sp, 32]
+    ldr x19, [sp, 40]
+    add sp, sp, 64
 
     ret
 
@@ -146,19 +145,22 @@ init_screen:
 
     mov x19, SCREEN_WIDTH
 init_screen_loopx:
-    subs x19, x19, 1
+    cmp x19, 0
     blt _init_screen
 
     mov x20, SCREEN_HEIGHT
 init_screen_loopy:
-    subs x20, x20, 1
-    blt init_screen_loopx
 
     mov x1, x19
     mov x2, x20
     bl pixel
 
-    b init_screen_loopy
+    sub x20, x20, 1
+    cmp x20, 0
+    bge init_screen_loopy
+
+    sub x19, x19, 1
+    b init_screen_loopx
 
 _init_screen:
     ldr lr,  [sp]
