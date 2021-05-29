@@ -1,4 +1,3 @@
-
 .equ SCREEN_WIDTH, 		640
 .equ SCREEN_HEIGHT,		480
 .equ SCALE_FACTOR,      20
@@ -8,18 +7,27 @@
 
 .equ BLACK, 0x00000000
 .equ WHITE, 0x00FFFFFF
-.equ INITIAL_SIZE, 3
+
+.equ INITIAL_SIZE,      5
+.equ SNEK_INITIAL_X,    4
+.equ SNEK_INITIAL_Y,    4
 
 .data
     gb_green:  .word 0x00CADC9F
     cyan:      .word 0x0046878F
     snek_size: .word INITIAL_SIZE
-    snek:      .byte 7, 3, 7, 4, 8, 4
+    snek:      .skip MAX_WIDTH * MAX_HEIGHT
 
 .text
 .globl main
 main:
     mov x20, x0 /* FRAMEBUFFER */
+
+    mov x0, x20
+    adr x1, snek
+    mov x2, SNEK_INITIAL_X
+    mov x3, SNEK_INITIAL_Y
+    bl init_snek
 
     mov x0, x20
     ldr w3, gb_green
@@ -179,6 +187,53 @@ _init_screen:
     ret
 
 /*
+    Subroutine: init_snek
+
+    Brief:
+        Initialize snek with 
+
+    Params:
+        x0 - framebuffer
+        x1 - snek base address
+        x2 - x
+        x3 - y
+*/
+init_snek:
+    sub sp, sp, 48
+    str x19, [sp, 32]
+    str x20, [sp, 24]
+    str x21, [sp, 16]
+    str x22, [sp, 8]
+    str lr,  [sp]
+
+    mov x19, x1
+    mov x20, x2
+    mov x21, x3
+    mov x22, xzr
+
+init_snek_loop:
+    cmp x22, INITIAL_SIZE
+    bge _init_snek
+
+    strb w20, [x19], 1
+    strb w21, [x19], 1
+
+    add x20, x20, 1
+    add x22, x22, 1
+
+    b init_snek_loop
+    
+_init_snek:
+    ldr lr,  [sp]
+    ldr x22, [sp, 8]
+    ldr x21, [sp, 16]
+    ldr x20, [sp, 24]
+    ldr x19, [sp, 32]
+    add sp, sp, 48
+
+    ret
+
+/*
     Subroutine: draw_snek
 
     Brief:
@@ -200,13 +255,14 @@ draw_snek:
     mov x19, x1
     mov x20, x2
     lsl x20, x20, 1
+    add x20, x19, x20
 
 draw_snek_loop:
     cmp x19, x20
     beq _draw_snek
 
-    ldrb w1, [x19], #1  /* access x and add 1 */
-    ldrb w2, [x19], #1  /* access y and go to next pair */
+    ldrb w1, [x19], 1  /* access x and add 1 */
+    ldrb w2, [x19], 1  /* access y and go to next pair */
 
     movk x1, 0, lsl 16
     movk x2, 0, lsl 16
@@ -216,8 +272,9 @@ draw_snek_loop:
 
 _draw_snek:
     ldr lr,  [sp]
-    ldr x20, [sp, 8]
-    ldr x19, [sp, 16]
-    add sp, sp, 24
+    ldr x21, [sp, 8]
+    ldr x20, [sp, 16]
+    ldr x19, [sp, 24]
+    add sp, sp, 32
 
     ret
