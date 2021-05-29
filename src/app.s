@@ -8,10 +8,13 @@
 
 .equ BLACK, 0x00000000
 .equ WHITE, 0x00FFFFFF
+.equ INITIAL_SIZE, 3
 
 .data
-    gb_green: .word 0x00CADC9F
-    cyan:     .word 0x0046878F
+    gb_green:  .word 0x00CADC9F
+    cyan:      .word 0x0046878F
+    snek_size: .word INITIAL_SIZE
+    snek:      .byte 7, 3, 7, 4, 8, 4
 
 .text
 .globl main
@@ -27,6 +30,12 @@ main:
     mov x2, MAX_HEIGHT
     ldr w3, cyan
     bl point
+
+    mov x0, x20
+    adr x1, snek
+    ldr x2, snek_size
+    ldr w3, cyan
+    bl draw_snek
 
     mov x0, x20
     mov x1, 0
@@ -162,6 +171,50 @@ init_screen_loopy:
     b init_screen_loopx
 
 _init_screen:
+    ldr lr,  [sp]
+    ldr x20, [sp, 8]
+    ldr x19, [sp, 16]
+    add sp, sp, 24
+
+    ret
+
+/*
+    Subroutine: draw_snek
+
+    Brief:
+        Paint the entire screen with a color
+
+    Params:
+        x0 - framebuffer
+        x1 - snek base address
+        x2 - snek size
+        w3 - color
+*/
+draw_snek:
+    sub sp, sp, 32
+    str x19, [sp, 24]
+    str x20, [sp, 16]
+    str x21, [sp, 8]
+    str lr,  [sp]
+
+    mov x19, x1
+    mov x20, x2
+    lsl x20, x20, 1
+
+draw_snek_loop:
+    cmp x19, x20
+    beq _draw_snek
+
+    ldrb w1, [x19], #1  /* access x and add 1 */
+    ldrb w2, [x19], #1  /* access y and go to next pair */
+
+    movk x1, 0, lsl 16
+    movk x2, 0, lsl 16
+    bl point
+
+    b draw_snek_loop
+
+_draw_snek:
     ldr lr,  [sp]
     ldr x20, [sp, 8]
     ldr x19, [sp, 16]
