@@ -101,7 +101,7 @@ point:
 
 point_loopx:
     cmp x20, x21
-    bgt _point
+    bge _point
 
     mov x22, x19
 point_loopy:
@@ -111,7 +111,7 @@ point_loopy:
 
     add x22, x22, 1
     cmp x22, x23
-    ble point_loopy
+    blt point_loopy
 
     add x20, x20, 1
     b point_loopx
@@ -143,12 +143,12 @@ init_screen:
     str x20, [sp, 8]
     str lr,  [sp]
 
-    mov x19, SCREEN_WIDTH
+    mov x19, #SCREEN_WIDTH-1
 init_screen_loopx:
     cmp x19, 0
     blt _init_screen
 
-    mov x20, SCREEN_HEIGHT
+    mov x20, #SCREEN_HEIGHT-1
 init_screen_loopy:
     mov x1, x19
     mov x2, x20
