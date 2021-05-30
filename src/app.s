@@ -8,14 +8,14 @@
 .equ BLACK, 0x00000000
 .equ WHITE, 0x00FFFFFF
 
-.equ INITIAL_SIZE,      5
+.equ SNEK_INITIAL_SIZE, 5
 .equ SNEK_INITIAL_X,    4
 .equ SNEK_INITIAL_Y,    4
 
 .data
     gb_green:  .word 0x00CADC9F
     cyan:      .word 0x0046878F
-    snek_size: .word INITIAL_SIZE
+    snek_size: .word SNEK_INITIAL_SIZE
     snek:      .skip MAX_WIDTH * MAX_HEIGHT
 
 .text
@@ -23,10 +23,9 @@
 main:
     mov x20, x0 /* FRAMEBUFFER */
 
-    mov x0, x20
-    adr x1, snek
-    mov x2, SNEK_INITIAL_X
-    mov x3, SNEK_INITIAL_Y
+    adr x0, snek
+    mov x1, SNEK_INITIAL_X
+    mov x2, SNEK_INITIAL_Y
     bl init_snek
 
     mov x0, x20
@@ -148,7 +147,7 @@ _point:
     Subroutine: init_screen
 
     Brief:
-        Paint the entire screen with a color
+        Draw the entire screen with a color
 
     Params:
         x0 - framebuffer
@@ -190,29 +189,27 @@ _init_screen:
     Subroutine: init_snek
 
     Brief:
-        Initialize snek with 
+        Initialize snek with SNEK_INITIAL_SIZE
 
     Params:
-        x0 - framebuffer
-        x1 - snek base address
-        x2 - x
-        x3 - y
+        x0 - snek base address
+        x1 - x pos
+        x2 - y pos
 */
 init_snek:
-    sub sp, sp, 48
-    str x19, [sp, 32]
-    str x20, [sp, 24]
-    str x21, [sp, 16]
-    str x22, [sp, 8]
-    str lr,  [sp]
+    sub sp, sp, 32
+    str x19, [sp, 24]
+    str x20, [sp, 16]
+    str x21, [sp, 8]
+    str x22, [sp]
 
-    mov x19, x1
-    mov x20, x2
-    mov x21, x3
+    mov x19, x0
+    mov x20, x1
+    mov x21, x2
     mov x22, xzr
 
 init_snek_loop:
-    cmp x22, INITIAL_SIZE
+    cmp x22, SNEK_INITIAL_SIZE
     bge _init_snek
 
     strb w20, [x19], 1
@@ -222,14 +219,13 @@ init_snek_loop:
     add x22, x22, 1
 
     b init_snek_loop
-    
+
 _init_snek:
-    ldr lr,  [sp]
-    ldr x22, [sp, 8]
-    ldr x21, [sp, 16]
-    ldr x20, [sp, 24]
-    ldr x19, [sp, 32]
-    add sp, sp, 48
+    ldr x22, [sp]
+    ldr x21, [sp, 8]
+    ldr x20, [sp, 16]
+    ldr x19, [sp, 24]
+    add sp, sp, 32
 
     ret
 
@@ -237,7 +233,7 @@ _init_snek:
     Subroutine: draw_snek
 
     Brief:
-        Paint the entire screen with a color
+        Draw a snek on the screen
 
     Params:
         x0 - framebuffer
