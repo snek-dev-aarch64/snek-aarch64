@@ -12,9 +12,9 @@
  <div class="CTitle">Functions</div>
 </div>
 
-<a name="pixel"></a><a name="Topic4"></a><div class="CTopic TFunction Larmassembly">
+<a name="pixel"></a><a name="Topic2"></a><div class="CTopic TFunction Larmassembly">
  <div class="CTitle">pixel</div>
- <div id="NDPrototype4" class="NDPrototype"><div class="PSection PPlainSection">pixel:</div></div>
+ <div id="NDPrototype2" class="NDPrototype"><div class="PSection PPlainSection">pixel:</div></div>
  <div class="CBody"><div class="CHeading">Brief</div><p>Draw a pixel into the framebuffer</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>framebuffer</p></td></tr><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>x pos</p></td></tr><tr><td class="CDLEntry">x2</td><td class="CDLDefinition"><p>y pos</p></td></tr><tr><td class="CDLEntry">w3</td><td class="CDLDefinition"><p>color</p></td></tr></table></div>
 </div>
 
@@ -24,10 +24,22 @@
  <div class="CBody"><div class="CHeading">Brief</div><p>Draw a point into the framebuffer based on the scale factor</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>framebuffer</p></td></tr><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>x pos</p></td></tr><tr><td class="CDLEntry">x2</td><td class="CDLDefinition"><p>y pos</p></td></tr><tr><td class="CDLEntry">w3</td><td class="CDLDefinition"><p>color</p></td></tr></table><div class="CHeading">Notes</div><p>The point coords should be choosen from 0,0 to MAX_WIDTH,MAX_HEIGHT</p></div>
 </div>
 
-<a name="init_screen"></a><a name="Topic6"></a><div class="CTopic TFunction Larmassembly last">
+<a name="init_screen"></a><a name="Topic4"></a><div class="CTopic TFunction Larmassembly">
  <div class="CTitle">init_screen</div>
- <div id="NDPrototype6" class="NDPrototype"><div class="PSection PPlainSection">init_screen:</div></div>
- <div class="CBody"><div class="CHeading">Brief</div><p>Paint the entire screen with a color</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>framebuffer</p></td></tr><tr><td class="CDLEntry">w3</td><td class="CDLDefinition"><p>color</p></td></tr></table></div>
+ <div id="NDPrototype4" class="NDPrototype"><div class="PSection PPlainSection">init_screen:</div></div>
+ <div class="CBody"><div class="CHeading">Brief</div><p>Draw the entire screen with a color</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>framebuffer</p></td></tr><tr><td class="CDLEntry">w3</td><td class="CDLDefinition"><p>color</p></td></tr></table></div>
+</div>
+
+<a name="init_snek"></a><a name="Topic5"></a><div class="CTopic TFunction Larmassembly">
+ <div class="CTitle">init_snek</div>
+ <div id="NDPrototype5" class="NDPrototype"><div class="PSection PPlainSection">init_snek:</div></div>
+ <div class="CBody"><div class="CHeading">Brief</div><p>Initialize snek with SNEK_INITIAL_SIZE</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>snek base address</p></td></tr><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>x pos</p></td></tr><tr><td class="CDLEntry">x2</td><td class="CDLDefinition"><p>y pos</p></td></tr></table></div>
+</div>
+
+<a name="draw_snek"></a><a name="Topic6"></a><div class="CTopic TFunction Larmassembly last">
+ <div class="CTitle">draw_snek</div>
+ <div id="NDPrototype6" class="NDPrototype"><div class="PSection PPlainSection">draw_snek:</div></div>
+ <div class="CBody"><div class="CHeading">Brief</div><p>Draw a snek on the screen</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>framebuffer</p></td></tr><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>snek base address</p></td></tr><tr><td class="CDLEntry">x2</td><td class="CDLDefinition"><p>snek size</p></td></tr><tr><td class="CDLEntry">w3</td><td class="CDLDefinition"><p>color</p></td></tr></table></div>
 </div>
 
 </body></html>

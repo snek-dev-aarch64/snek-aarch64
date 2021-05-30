@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("ini",["Function"],[["init_screen",,[[,,,,0,"File:app.s:init_screen"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("ini",["Function"],[["init_screen",,[[,,,,0,"File:app.s:init_screen"]]],["init_snek",,[[,,,,0,"File:app.s:init_snek"]]]]);
