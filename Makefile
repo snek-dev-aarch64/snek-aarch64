@@ -22,4 +22,3 @@ run : all
 .PHONY: clean
 clean :
 	-rm -f $(ASM_OBJS) memory_map.txt kernel8.list kernel8.img kernel8.elf
-
