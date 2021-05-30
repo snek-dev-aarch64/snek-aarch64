@@ -1,14 +1,19 @@
 ARMGNU ?= aarch64-linux-gnu
 
-SRC_DIR = src
+SRC_DIR = src/
 
 AOPS = -g --warn --fatal-warnings
 ASM_SRCS = $(shell find $(SRC_DIR) -name *.s)
-ASM_OBJS = $(ASM_SRCS:.s=.o)
+ASM_OBJS = $(patsubst $(SRC_DIR)%.s,%.o,$(ASM_SRCS))
 
-all : kernel8.img
+all: kernel8.img
 
-%.o: %.s
+start.o: $(SRC_DIR)start.s screen.o
+app.o: $(SRC_DIR)app.s screen.o
+snek.o: $(SRC_DIR)snek.s screen.o
+screen.o: $(SRC_DIR)screen.s
+
+$(ASM_OBJS):
 	$(ARMGNU)-as $(AOPS) $< -o $@
 
 kernel8.img : memmap $(ASM_OBJS)
