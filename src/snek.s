@@ -8,17 +8,21 @@
 .equ SNEK_INITIAL_X,    4
 .equ SNEK_INITIAL_Y,    4
 
+.equ SNEK_COLOR_OFFSET,    0
+.equ SNEK_SIZE_OFFSET,     4
+.equ SNEK_FRONT_OFFSET,    8
+.equ SNEK_REAR_OFFSET,     12
+.equ SNEK_CAPACITY_OFFSET, 16
+.equ SNEK_ARRAY_OFFSET,    20
+
 /*
     A snek is a static array defined as follows:
     snek:
-        .align 4
         .word (color)
-
-        .align 8
-        .dword (size)
-        .dword (front)
-        .dword (rear)
-        .dword SNEK_MAXIMUM_SIZE   (capacity)
+        .word (size)
+        .word (front)
+        .word (rear)
+        .word SNEK_MAXIMUM_SIZE    (capacity)
         .skip  4*SNEK_MAXIMUM_SIZE (coord array)
 
     - The coord array is made out of 'pairs' (x,y) stored as halfwords
@@ -45,6 +49,7 @@ init_snek:
     str x22, [sp]
 
     mov x19, x0
+    add x19, x19, SNEK_ARRAY_OFFSET
     mov x20, x1
     mov x21, x2
     mov x22, xzr
@@ -89,10 +94,9 @@ draw_snek:
     str x21, [sp, 8]
     str lr,  [sp]
 
-    mov x19, x1
-    mov x20, x2
-    lsl x20, x20, 1
-    add x20, x19, x20
+    add x19, x1, SNEK_ARRAY_OFFSET
+    add x20, x1, SNEK_SIZE_OFFSET
+    ldrh w21, [x1, SNEK_COLOR_OFFSET]
 
 draw_snek_loop:
     cmp x19, x20
@@ -103,6 +107,7 @@ draw_snek_loop:
 
     movk x1, 0, lsl 16
     movk x2, 0, lsl 16
+    mov w3, w21
     bl point
 
     b draw_snek_loop

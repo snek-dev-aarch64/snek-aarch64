@@ -8,9 +8,14 @@
 
 .data
     background: .word GB_GREEN
-    snek_color: .word CYAN
-    snek_size:  .word SNEK_INITIAL_SIZE
-    snek:       .skip MAX_WIDTH * MAX_HEIGHT * 2
+    foreground: .word CYAN
+    snek:
+        .word CYAN
+        .word SNEK_INITIAL_SIZE
+        .word 0
+        .word SNEK_INITIAL_SIZE - 1
+        .word SNEK_MAXIMUM_SIZE
+        .skip 4 * SNEK_MAXIMUM_SIZE
 
 .text
 .globl main
@@ -29,19 +34,17 @@ main:
     mov x0, x20
     mov x1, MAX_WIDTH
     mov x2, MAX_HEIGHT
-    ldr w3, snek_color
+    ldr w3, foreground
     bl point
 
     mov x0, x20
     adr x1, snek
-    ldr x2, snek_size
-    ldr w3, snek_color
     bl draw_snek
 
     mov x0, x20
     mov x1, 0
     mov x2, 0
-    ldr w3, snek_color
+    ldr w3, foreground
     bl point
 
 InfLoop:
