@@ -3,8 +3,8 @@
 
 .equ SCREEN_WIDTH, 	 640
 .equ SCREEN_HEIGHT,	 480
-.equ SCALE_FACTOR,   10
 .equ BITS_PER_PIXEL, 32
+.equ SCALE_FACTOR,   10
 .equ MAX_WIDTH,      SCREEN_WIDTH / SCALE_FACTOR - 1
 .equ MAX_HEIGHT,     SCREEN_HEIGHT / SCALE_FACTOR - 1
 
@@ -52,7 +52,7 @@ _pixel:
         The point coords should be choosen from 0,0 to MAX_WIDTH,MAX_HEIGHT
 */
 point:
-    sub sp, sp, 64
+    sub sp, sp, 48
     str x19, [sp, 40]
     str x20, [sp, 32]
     str x21, [sp, 24]
@@ -93,7 +93,7 @@ _point:
     ldr x21, [sp, 24]
     ldr x20, [sp, 32]
     ldr x19, [sp, 40]
-    add sp, sp, 64
+    add sp, sp, 48
 
     ret
 
