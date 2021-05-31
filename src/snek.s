@@ -4,8 +4,27 @@
 .include "src/screen.s"
 
 .equ SNEK_INITIAL_SIZE, 5
+.equ SNEK_MAXIMUM_SIZE, 55
 .equ SNEK_INITIAL_X,    4
 .equ SNEK_INITIAL_Y,    4
+
+/*
+    A snek is a static array defined as follows:
+    snek:
+        .align 4
+        .word (color)
+
+        .align 8
+        .dword (size)
+        .dword (front)
+        .dword (rear)
+        .dword SNEK_MAXIMUM_SIZE   (capacity)
+        .skip  4*SNEK_MAXIMUM_SIZE (coord array)
+
+    - The coord array is made out of 'pairs' (x,y) stored as halfwords
+    - Size denotes how many pairs there are currently in the snake
+    - Capacity denotes the maximum amount of pairs the sanake can handle
+*/
 
 /*
     Subroutine: init_snek
@@ -34,8 +53,8 @@ init_snek_loop:
     cmp x22, SNEK_INITIAL_SIZE
     bge _init_snek
 
-    strb w20, [x19], 1
-    strb w21, [x19], 1
+    strh w20, [x19], 2 /* store x_i and add 2 */
+    strh w21, [x19], 2 /* store y_i and advance to next pair  */
 
     add x20, x20, 1
     add x22, x22, 1
@@ -79,8 +98,8 @@ draw_snek_loop:
     cmp x19, x20
     beq _draw_snek
 
-    ldrb w1, [x19], 1  /* access x and add 1 */
-    ldrb w2, [x19], 1  /* access y and go to next pair */
+    ldrh w1, [x19], 2  /* load x and add 2 */
+    ldrh w2, [x19], 2  /* load y and go to next pair */
 
     movk x1, 0, lsl 16
     movk x2, 0, lsl 16
