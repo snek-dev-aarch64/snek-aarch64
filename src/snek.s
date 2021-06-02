@@ -19,11 +19,11 @@
     A snek is a static array defined as follows:
     snek:
         .word (color)
-        .word (size)
-        .word (front)
-        .word (rear)
-        .word SNEK_MAXIMUM_SIZE    (capacity)
-        .skip  4*SNEK_MAXIMUM_SIZE (coord array)
+        .word SNEK_INITIAL_SIZE   (size)
+        .word 0                   (front)
+        .word SNEK_MAXIMUM_SIZE-1 (rear)
+        .word SNEK_MAXIMUM_SIZE   (capacity)
+        .skip 4*SNEK_MAXIMUM_SIZE (coord array)
 
     - The coord array is made out of 'pairs' (x,y) stored as halfwords
     - Size denotes how many pairs there are currently in the snake
@@ -76,6 +76,57 @@ _init_snek:
     ret
 
 /*
+    Subroutine: snek_push
+
+    Brief:
+        Push a coord pair into the snek
+
+    Params:
+        x0 - snek base address
+        x1 - x pos
+        x2 - y pos
+
+    Notes:
+        The size of the snek should be less than its capacity
+*/
+snek_push:
+    sub sp, sp, 24
+    str x19, [sp, 16]
+    str x20, [sp, 8]
+    str x21, [sp]
+
+    ldrh w19, [x0, SNEK_SIZE_OFFSET]
+    add  w19, w19, 1
+    strh w19, [x0, SNEK_SIZE_OFFSET]
+
+    ldrh w19, [x0, SNEK_REAR_OFFSET]
+    ldrh w20, [x0, SNEK_CAPACITY_OFFSET]
+
+    /* compute (w19+1) % w20 */
+    add  w19, w19, 1    /* w19 = w19 + 1 */
+    //udiv w21, w19, w20  /* w21 = w19/w20 */
+    //mul  w21, w21, w20  /* w21 = w21*w20 */
+    //sub  w19, w19, w21  /* w19 = w19-w21 */
+
+    strh w19, [x0, SNEK_REAR_OFFSET]
+
+    movk x19, 0, lsl 32
+    lsl x19, x19, 1
+
+    add x20, x0, SNEK_ARRAY_OFFSET
+    add x20, x20, x19
+
+    strh w1, [x20], 2
+    strh w2, [x20]
+
+_snek_push:
+    ldr x21, [sp]
+    ldr x20, [sp, 8]
+    ldr x19, [sp, 16]
+    add sp, sp, 8
+    ret
+
+/*
     Subroutine: draw_snek
 
     Brief:
@@ -84,8 +135,6 @@ _init_snek:
     Params:
         x0 - framebuffer
         x1 - snek base address
-        x2 - snek size
-        w3 - color
 */
 draw_snek:
     sub sp, sp, 32
@@ -94,9 +143,14 @@ draw_snek:
     str x21, [sp, 8]
     str lr,  [sp]
 
-    add x19, x1, SNEK_ARRAY_OFFSET
-    add x20, x1, SNEK_SIZE_OFFSET
+    ldrh w20, [x1, SNEK_SIZE_OFFSET]
     ldrh w21, [x1, SNEK_COLOR_OFFSET]
+
+    add x19, x1, SNEK_ARRAY_OFFSET
+
+    movk x20, 0, lsl 32
+    lsl  x20, x20, 1
+    add  x20, x20, x19
 
 draw_snek_loop:
     cmp x19, x20
@@ -105,8 +159,8 @@ draw_snek_loop:
     ldrh w1, [x19], 2  /* load x and add 2 */
     ldrh w2, [x19], 2  /* load y and go to next pair */
 
-    movk x1, 0, lsl 16
-    movk x2, 0, lsl 16
+    movk x1, 0, lsl 32
+    movk x2, 0, lsl 32
     mov w3, w21
     bl point
 
@@ -121,4 +175,4 @@ _draw_snek:
 
     ret
 
-.endif
+.endif /* _SNEK_S */

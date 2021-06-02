@@ -4,7 +4,7 @@
 .equ SCREEN_WIDTH, 	 640
 .equ SCREEN_HEIGHT,	 480
 .equ BITS_PER_PIXEL, 32
-.equ SCALE_FACTOR,   10
+.equ SCALE_FACTOR,   40
 .equ MAX_WIDTH,      SCREEN_WIDTH / SCALE_FACTOR - 1
 .equ MAX_HEIGHT,     SCREEN_HEIGHT / SCALE_FACTOR - 1
 
@@ -139,4 +139,4 @@ _init_screen:
 
     ret
 
-.endif
+.endif /* _SNEK_S */

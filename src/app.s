@@ -37,6 +37,11 @@ main:
     ldr w3, foreground
     bl point
 
+    adr x0, snek
+    mov x1, 10
+    mov x2, 4
+    bl snek_push
+
     mov x0, x20
     adr x1, snek
     bl draw_snek
