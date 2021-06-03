@@ -37,21 +37,23 @@ _pixel:
     ret
 
 /*
-    Subroutine: point
+    Subroutine: block
 
     Brief:
-        Draw a point into the framebuffer based on the scale factor
+        Draw a block into the framebuffer based on the scale factor and on the provided padding
 
     Params:
         x0 - framebuffer
         x1 - x pos
         x2 - y pos
         w3 - color
+        x4 - padding
 
     Notes:
-        The point coords should be choosen from 0,0 to MAX_WIDTH,MAX_HEIGHT
+        The block coords should be choosen from 0,0 to MAX_WIDTH,MAX_HEIGHT
 */
-point:
+
+block:
     sub sp, sp, 48
     str x19, [sp, 40]
     str x20, [sp, 32]
@@ -64,29 +66,33 @@ point:
 
     mul x20, x1, x19  /* x min */
     add x21, x20, x19 /* x max */
+    add x20, x20, x4
+    sub x21, x21, x4
 
     mul x22, x2, x19  /* y min */
     add x23, x22, x19 /* y max */
-    mov x19, x22      /* y temp */
+    add x22, x22, x4
+    sub x23, x23, x4
 
-point_loopx:
+block_loopx:
     cmp x20, x21
-    bge _point
+    bge _block
 
-    mov x22, x19
-point_loopy:
+    mov x19, x22
+
+block_loopy:
     mov x1, x20
-    mov x2, x22
+    mov x2, x19
     bl pixel
 
-    add x22, x22, 1
-    cmp x22, x23
-    blt point_loopy
+    add x19, x19, 1
+    cmp x19, x23
+    blt block_loopy
 
     add x20, x20, 1
-    b point_loopx
+    b block_loopx
 
-_point:
+_block:
     ldr lr,  [sp]
     ldr x23, [sp, 8]
     ldr x22, [sp, 16]
@@ -94,6 +100,34 @@ _point:
     ldr x20, [sp, 32]
     ldr x19, [sp, 40]
     add sp, sp, 48
+
+    ret
+
+/*
+    Subroutine: point
+
+    Brief:
+        Draw a block with padding=0px
+
+    Params:
+        x0 - framebuffer
+        x1 - x pos
+        x2 - y pos
+        w3 - color
+
+    Notes:
+        The point coords should be choosen from 0,0 to MAX_WIDTH,MAX_HEIGHT
+*/
+point:
+    sub sp, sp, 8
+    str lr,  [sp]
+
+    mov x4, xzr
+    bl block
+
+_point:
+    ldr lr,  [sp]
+    add sp, sp, 8
 
     ret
 

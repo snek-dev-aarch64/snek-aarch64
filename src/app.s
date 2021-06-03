@@ -1,13 +1,14 @@
 .include "src/screen.s"
 .include "src/snek.s"
 
-.equ BLACK,    0x00000000
-.equ WHITE,    0x00FFFFFF
-.equ CYAN,     0x0046878F
-.equ GB_GREEN, 0x00CADC9F
+.equ BLACK,     0x00000000
+.equ WHITE,     0x00FFFFFF
+.equ CYAN,      0x0046878F
+.equ GB_DGREEN, 0x003D4130
+.equ GB_LGREEN, 0x00C4D0A2
 
 .data
-    background: .word GB_GREEN
+    background: .word GB_LGREEN
     foreground: .word CYAN
     snek:
         .word CYAN
@@ -31,12 +32,6 @@ main:
     ldr w3, background
     bl init_screen
 
-    //mov x0, x20
-    //mov x1, MAX_WIDTH
-    //mov x2, MAX_HEIGHT
-    //ldr w3, foreground
-    //bl point
-
     adr x0, snek
     mov x1, 9
     mov x2, 4
@@ -56,11 +51,11 @@ main:
     adr x1, snek
     bl draw_snek
 
-    //mov x0, x20
-    //mov x1, 0
-    //mov x2, 0
-    //ldr w3, foreground
-    //bl point
+    mov x0, x20
+    mov x1, 0
+    mov x2, 0
+    ldr w3, foreground
+    bl point
 
 InfLoop:
     b InfLoop

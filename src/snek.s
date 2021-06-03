@@ -3,10 +3,11 @@
 
 .include "src/screen.s"
 
-.equ SNEK_INITIAL_SIZE, 5
-.equ SNEK_MAXIMUM_SIZE, 55
-.equ SNEK_INITIAL_X,    4
-.equ SNEK_INITIAL_Y,    4
+.equ SNEK_INITIAL_SIZE,  5
+.equ SNEK_MAXIMUM_SIZE,  55
+.equ SNEK_INITIAL_X,     4
+.equ SNEK_INITIAL_Y,     4
+.equ SNEK_BLOCK_PADDING, SCALE_FACTOR / 10
 
 .equ SNEK_COLOR_OFFSET,    0
 .equ SNEK_SIZE_OFFSET,     4
@@ -179,7 +180,8 @@ draw_snek_loop:
     movk x1, 0, lsl 32
     movk x2, 0, lsl 32
     mov w3, w20
-    bl point
+    mov x4, SNEK_BLOCK_PADDING
+    bl block
 
     add x24, x24, 1
 
