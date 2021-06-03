@@ -12,6 +12,7 @@ start.o: $(SRC_DIR)start.s screen.o
 app.o: $(SRC_DIR)app.s screen.o snek.o
 snek.o: $(SRC_DIR)snek.s screen.o
 screen.o: $(SRC_DIR)screen.s
+random.o: $(SRC_DIR)random.s
 
 $(ASM_OBJS):
 	$(ARMGNU)-as $(AOPS) $< -o $@
