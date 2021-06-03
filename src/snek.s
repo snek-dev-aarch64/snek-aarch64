@@ -96,18 +96,19 @@ snek_push:
     str x20, [sp, 8]
     str x21, [sp]
 
-    ldrh w19, [x0, SNEK_SIZE_OFFSET]
+    ldr w19, [x0, SNEK_SIZE_OFFSET]
     add  w19, w19, 1
-    strh w19, [x0, SNEK_SIZE_OFFSET]
+    str w19, [x0, SNEK_SIZE_OFFSET]
 
-    ldrh w19, [x0, SNEK_REAR_OFFSET]
-    ldrh w20, [x0, SNEK_CAPACITY_OFFSET]
+    ldr w19, [x0, SNEK_REAR_OFFSET]
+    ldr w20, [x0, SNEK_CAPACITY_OFFSET]
 
-    add w19, w19, 1         /* numerator */
-    udiv w21, w19, w20      /* w21 = w19/w20 */
-    msub w19, w21, w20, w19 /* w19 = w19 - (w21*w20) */
+    /* REAR = (REAR + 1) % CAPACITY */
+    add w19, w19, 1         /* REAR = REAR + 1 */
+    udiv w21, w19, w20      /* w21 = REAR // CAPACITY */
+    msub w19, w21, w20, w19 /* REAR = REAR - (w21*CAPACITY) */
 
-    strh w19, [x0, SNEK_REAR_OFFSET]
+    str w19, [x0, SNEK_REAR_OFFSET]
 
     movk x19, 0, lsl 32
     lsl x19, x19, 2
@@ -123,6 +124,47 @@ _snek_push:
     ldr x20, [sp, 8]
     ldr x19, [sp, 16]
     add sp, sp, 8
+
+    ret
+
+/*
+    Subroutine: snek_push
+
+    Brief:
+        Pop a coord pair from the snek
+
+    Params:
+        x0 - snek base address
+
+    Notes:
+        The snek array should not be empty
+*/
+snek_pop:
+    sub sp, sp, 12
+    str w19, [sp, 8]
+    str w20, [sp, 4]
+    str w21, [sp]
+
+    ldr w19, [x0, SNEK_SIZE_OFFSET]
+    sub w19, w19, 1
+    str w19, [x0, SNEK_SIZE_OFFSET]
+
+    ldr w19, [x0, SNEK_FRONT_OFFSET]
+    ldr w20, [x0, SNEK_CAPACITY_OFFSET]
+
+    /* FRONT = (FRONT + 1) % CAPACITY */
+    add  w19, w19, 1        /* FRONT = FRONT + 1 */
+    udiv w21, w19, w20      /* w21 = FRONT // CAPACITY */
+    msub w19, w21, w20, w19 /* FRONT = FRONT - (w21*CAPACITY) */
+
+    str w19, [x0, SNEK_FRONT_OFFSET]
+
+_snek_pop:
+    ldr w21, [sp]
+    ldr w20, [sp, 4]
+    ldr w19, [sp, 8]
+    add sp, sp, 12
+
     ret
 
 /*
@@ -149,13 +191,13 @@ draw_snek:
 
     /*
         &A[0] = ARRAY + FRONT
-        &A[i] = ARRAY + (FRONT + i) % CAPACITY
+        &A[i] = ARRAY + 4*((FRONT + i) % CAPACITY)
     */
 
-    ldrh w20, [x1, SNEK_COLOR_OFFSET]
-    ldrh w21, [x1, SNEK_CAPACITY_OFFSET]
-    ldrh w22, [x1, SNEK_FRONT_OFFSET]
-    ldrh w23, [x1, SNEK_SIZE_OFFSET]
+    ldr w20, [x1, SNEK_COLOR_OFFSET]
+    ldr w21, [x1, SNEK_CAPACITY_OFFSET]
+    ldr w22, [x1, SNEK_FRONT_OFFSET]
+    ldr w23, [x1, SNEK_SIZE_OFFSET]
 
     movk x21, 0, lsl 32
     movk x22, 0, lsl 32
@@ -163,14 +205,14 @@ draw_snek:
 
     add x19, x1, SNEK_ARRAY_OFFSET
 
-    mov x24, 0
+    mov x24, xzr
 draw_snek_loop:
     cmp x24, x23   /* i == size */
     beq _draw_snek
 
     add  x25, x22, x24      /* j = FRONT + i */
-    udiv x26, x25, x23      /* jtemp = j/capacity */
-    msub x25, x26, x23, x25 /* j = (FRONT + i) % CAPACITY */
+    udiv x26, x25, x21      /* jtemp = j // capacity */
+    msub x25, x26, x21, x25 /* j = (FRONT + i) % CAPACITY */
 
     lsl x25, x25, 2
     ldrh w1, [x19, x25]

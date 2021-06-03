@@ -11,7 +11,7 @@
     background: .word GB_LGREEN
     foreground: .word CYAN
     snek:
-        .word CYAN
+        .word GB_DGREEN
         .word SNEK_INITIAL_SIZE
         .word 0
         .word SNEK_INITIAL_SIZE - 1
@@ -46,6 +46,9 @@ main:
     mov x1, 10
     mov x2, 5
     bl snek_push
+
+    adr x0, snek
+    bl snek_pop
 
     mov x0, x20
     adr x1, snek
