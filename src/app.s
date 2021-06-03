@@ -31,26 +31,31 @@ main:
     ldr w3, background
     bl init_screen
 
-    mov x0, x20
-    mov x1, MAX_WIDTH
-    mov x2, MAX_HEIGHT
-    ldr w3, foreground
-    bl point
+    //mov x0, x20
+    //mov x1, MAX_WIDTH
+    //mov x2, MAX_HEIGHT
+    //ldr w3, foreground
+    //bl point
 
     adr x0, snek
-    mov x1, 10
+    mov x1, 9
     mov x2, 4
+    bl snek_push
+
+    adr x0, snek
+    mov x1, 9
+    mov x2, 5
     bl snek_push
 
     mov x0, x20
     adr x1, snek
     bl draw_snek
 
-    mov x0, x20
-    mov x1, 0
-    mov x2, 0
-    ldr w3, foreground
-    bl point
+    //mov x0, x20
+    //mov x1, 0
+    //mov x2, 0
+    //ldr w3, foreground
+    //bl point
 
 InfLoop:
     b InfLoop

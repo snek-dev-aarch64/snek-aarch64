@@ -102,16 +102,14 @@ snek_push:
     ldrh w19, [x0, SNEK_REAR_OFFSET]
     ldrh w20, [x0, SNEK_CAPACITY_OFFSET]
 
-    /* compute (w19+1) % w20 */
-    add  w19, w19, 1    /* w19 = w19 + 1 */
-    //udiv w21, w19, w20  /* w21 = w19/w20 */
-    //mul  w21, w21, w20  /* w21 = w21*w20 */
-    //sub  w19, w19, w21  /* w19 = w19-w21 */
+    add w19, w19, 1         /* numerator */
+    udiv w21, w19, w20      /* w21 = w19/w20 */
+    msub w19, w21, w20, w19 /* w19 = w19 - (w21*w20) */
 
     strh w19, [x0, SNEK_REAR_OFFSET]
 
     movk x19, 0, lsl 32
-    lsl x19, x19, 1
+    lsl x19, x19, 2
 
     add x20, x0, SNEK_ARRAY_OFFSET
     add x20, x20, x19
@@ -137,10 +135,11 @@ _snek_push:
         x1 - snek base address
 */
 draw_snek:
-    sub sp, sp, 32
-    str x19, [sp, 24]
-    str x20, [sp, 16]
-    str x21, [sp, 8]
+    sub sp, sp, 40
+    str x19, [sp, 32]
+    str x20, [sp, 24]
+    str x21, [sp, 16]
+    str x22, [sp, 8]
     str lr,  [sp]
 
     ldrh w20, [x1, SNEK_SIZE_OFFSET]
@@ -149,7 +148,7 @@ draw_snek:
     add x19, x1, SNEK_ARRAY_OFFSET
 
     movk x20, 0, lsl 32
-    lsl  x20, x20, 1
+    lsl  x20, x20, 2
     add  x20, x20, x19
 
 draw_snek_loop:
@@ -168,9 +167,10 @@ draw_snek_loop:
 
 _draw_snek:
     ldr lr,  [sp]
-    ldr x21, [sp, 8]
-    ldr x20, [sp, 16]
-    ldr x19, [sp, 24]
+    ldr x22, [sp, 8]
+    ldr x21, [sp, 16]
+    ldr x20, [sp, 24]
+    ldr x19, [sp, 32]
     add sp, sp, 32
 
     ret
