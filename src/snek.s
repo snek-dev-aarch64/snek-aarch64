@@ -135,43 +135,67 @@ _snek_push:
         x1 - snek base address
 */
 draw_snek:
-    sub sp, sp, 40
-    str x19, [sp, 32]
-    str x20, [sp, 24]
-    str x21, [sp, 16]
-    str x22, [sp, 8]
+    sub sp, sp, 72
+    str x19, [sp, 64] /* array */
+    str x20, [sp, 56] /* color */
+    str x21, [sp, 48] /* capacity */
+    str x22, [sp, 40] /* front */
+    str x23, [sp, 32] /* size */
+    str x24, [sp, 24] /* i */
+    str x25, [sp, 16] /* j */
+    str x26, [sp, 8]  /* jtemp */
     str lr,  [sp]
 
-    ldrh w20, [x1, SNEK_SIZE_OFFSET]
-    ldrh w21, [x1, SNEK_COLOR_OFFSET]
+    /*
+        &A[0] = ARRAY + FRONT
+        &A[i] = ARRAY + (FRONT + i) % CAPACITY
+    */
+
+    ldrh w20, [x1, SNEK_COLOR_OFFSET]
+    ldrh w21, [x1, SNEK_CAPACITY_OFFSET]
+    ldrh w22, [x1, SNEK_FRONT_OFFSET]
+    ldrh w23, [x1, SNEK_SIZE_OFFSET]
+
+    movk x21, 0, lsl 32
+    movk x22, 0, lsl 32
+    movk x23, 0, lsl 32
 
     add x19, x1, SNEK_ARRAY_OFFSET
 
-    movk x20, 0, lsl 32
-    lsl  x20, x20, 2
-    add  x20, x20, x19
-
+    mov x24, 0
 draw_snek_loop:
-    cmp x19, x20
+    cmp x24, x23   /* i == size */
     beq _draw_snek
 
-    ldrh w1, [x19], 2  /* load x and add 2 */
-    ldrh w2, [x19], 2  /* load y and go to next pair */
+    add  x25, x22, x24      /* j = FRONT + i */
+    udiv x26, x25, x23      /* jtemp = j/capacity */
+    msub x25, x26, x23, x25 /* j = (FRONT + i) % CAPACITY */
+
+    lsl x25, x25, 2
+    ldrh w1, [x19, x25]
+    add x25, x25, 2
+    ldrh w2, [x19, x25]
 
     movk x1, 0, lsl 32
     movk x2, 0, lsl 32
-    mov w3, w21
+    mov w3, w20
     bl point
+
+    add x24, x24, 1
 
     b draw_snek_loop
 
 _draw_snek:
     ldr lr,  [sp]
-    ldr x22, [sp, 8]
-    ldr x21, [sp, 16]
-    ldr x20, [sp, 24]
-    ldr x19, [sp, 32]
-    add sp, sp, 32
+    str x26, [sp, 8]
+    str x25, [sp, 16]
+    str x24, [sp, 24]
+    str x23, [sp, 32]
+    ldr x22, [sp, 40]
+    ldr x21, [sp, 48]
+    ldr x20, [sp, 56]
+    ldr x19, [sp, 64]
+    add sp, sp, 72
 
     ret
 

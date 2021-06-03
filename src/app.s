@@ -47,6 +47,11 @@ main:
     mov x2, 5
     bl snek_push
 
+    adr x0, snek
+    mov x1, 10
+    mov x2, 5
+    bl snek_push
+
     mov x0, x20
     adr x1, snek
     bl draw_snek
