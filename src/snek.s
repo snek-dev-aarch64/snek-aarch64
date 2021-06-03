@@ -123,7 +123,7 @@ _snek_push:
     ldr x21, [sp]
     ldr x20, [sp, 8]
     ldr x19, [sp, 16]
-    add sp, sp, 8
+    add sp, sp, 24
 
     ret
 
