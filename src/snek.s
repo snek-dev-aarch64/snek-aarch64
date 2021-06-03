@@ -168,6 +168,78 @@ _snek_pop:
     ret
 
 /*
+    Subroutine: snek_head
+
+    Brief:
+        Return the first pair of the snek queue
+
+    Params:
+        x0 - snek base address
+
+    Return:
+        x0 - x
+        x1 - y
+*/
+snek_head:
+    sub sp, sp, 8
+    str x19, [sp]
+
+    ldr w19, [x0, SNEK_REAR_OFFSET]
+    movk x19, 0, lsl 32
+
+    add x0, x0, SNEK_ARRAY_OFFSET
+
+    lsl x19, x19, 2
+    ldrh w1, [x0, x19]
+    add x19, x19, 2
+    ldrh w2, [x0, x19]
+
+    movk x1, 0, lsl 32
+    movk x2, 0, lsl 32
+
+_snek_head:
+    ldr x19, [sp]
+    add sp, sp, 8
+
+    ret
+
+/*
+    Subroutine: snek_last
+
+    Brief:
+        Return the last pair of the snek queue
+
+    Params:
+        x0 - snek base address
+
+    Return:
+        x0 - x
+        x1 - y
+*/
+snek_last:
+    sub sp, sp, 8
+    str x19, [sp]
+
+    ldr w19, [x0, SNEK_FRONT_OFFSET]
+    movk x19, 0, lsl 32
+
+    add x0, x0, SNEK_ARRAY_OFFSET
+
+    lsl x19, x19, 2
+    ldrh w1, [x0, x19]
+    add x19, x19, 2
+    ldrh w2, [x0, x19]
+
+    movk x1, 0, lsl 32
+    movk x2, 0, lsl 32
+
+_snek_last:
+    ldr x19, [sp]
+    add sp, sp, 8
+
+    ret
+
+/*
     Subroutine: draw_snek
 
     Brief:

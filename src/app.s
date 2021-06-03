@@ -32,27 +32,46 @@ main:
     ldr w3, background
     bl init_screen
 
+    mov x0, x20
+    adr x1, snek
+    bl draw_snek
+
     adr x0, snek
     mov x1, 9
     mov x2, 4
     bl snek_push
 
     adr x0, snek
+    bl snek_head
+
+    mov x0, x20
+    ldr w3, foreground
+    mov x4, SNEK_BLOCK_PADDING
+    bl block
+
+    adr x0, snek
+    bl snek_last
+
+    mov x0, x20
+    ldr w3, background
+    mov x4, SNEK_BLOCK_PADDING
+    bl block
+
+    adr x0, snek
+    bl snek_pop
+
+    adr x0, snek
     mov x1, 9
     mov x2, 5
     bl snek_push
 
     adr x0, snek
-    mov x1, 10
-    mov x2, 5
-    bl snek_push
-
-    adr x0, snek
-    bl snek_pop
+    bl snek_head
 
     mov x0, x20
-    adr x1, snek
-    bl draw_snek
+    ldr w3, foreground
+    mov x4, SNEK_BLOCK_PADDING
+    bl block
 
     mov x0, x20
     mov x1, 0
