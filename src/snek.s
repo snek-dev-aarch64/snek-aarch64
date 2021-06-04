@@ -303,10 +303,10 @@ draw_snek_loop:
 
 _draw_snek:
     ldr lr,  [sp]
-    str x26, [sp, 8]
-    str x25, [sp, 16]
-    str x24, [sp, 24]
-    str x23, [sp, 32]
+    ldr x26, [sp, 8]
+    ldr x25, [sp, 16]
+    ldr x24, [sp, 24]
+    ldr x23, [sp, 32]
     ldr x22, [sp, 40]
     ldr x21, [sp, 48]
     ldr x20, [sp, 56]

@@ -9,7 +9,7 @@
 
 .data
     background: .word GB_LGREEN
-    foreground: .word CYAN
+    foreground: .word GB_DGREEN
     snek:
         .word GB_DGREEN
         .word SNEK_INITIAL_SIZE
