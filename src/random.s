@@ -4,7 +4,7 @@
 .equ RAND_MAX, 0x7FFFFFFFFFFFFFFF
 
 .data
-    rseed: .dword 1
+    rseed: .dword 54124
 
 /*
     Subroutine: srand

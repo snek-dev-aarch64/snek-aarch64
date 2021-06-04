@@ -1,15 +1,18 @@
 .include "src/screen.s"
 .include "src/snek.s"
+.include "src/food.s"
 
 .equ BLACK,     0x00000000
 .equ WHITE,     0x00FFFFFF
 .equ CYAN,      0x0046878F
 .equ GB_DGREEN, 0x003D4130
 .equ GB_LGREEN, 0x00C4D0A2
+.equ RED, 0x00FF0000
 
 .data
     background: .word GB_LGREEN
     foreground: .word GB_DGREEN
+    food:       .word RED
     snek:
         .word GB_DGREEN
         .word SNEK_INITIAL_SIZE
@@ -77,6 +80,15 @@ main:
     mov x1, 0
     mov x2, 0
     ldr w3, foreground
+    bl point
+
+    adr x0, snek
+    bl new_food
+
+    mov x1, x0
+    mov x2, x1
+    mov x0, x20
+    ldr w3, food
     bl point
 
 InfLoop:
