@@ -52,7 +52,7 @@ new_food_random:
     bl randzn
     mov x27, x0
 
-new_food_loop:
+new_food_in_snake_loop:
     cmp x23, x22   /* i == size */
     beq _new_food
 
@@ -68,6 +68,8 @@ new_food_loop:
     movk x1, 0, lsl 32
     movk x2, 0, lsl 32
 
+    /* if the random coords are not inside the snake, check the next pair */
+    /* if the coord are inside, generate new ones */
     cmp x1, x26
     bne new_food_continue
     cmp x2, x27
@@ -76,7 +78,7 @@ new_food_loop:
 new_food_continue:
     add x23, x23, 1
 
-    b new_food_loop
+    b new_food_in_snake_loop
 
 _new_food:
     mov x0, x26
