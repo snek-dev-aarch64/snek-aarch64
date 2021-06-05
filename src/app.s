@@ -2,6 +2,8 @@
 .include "src/snek.s"
 .include "src/food.s"
 
+.equ RAND_SEED, 213
+
 .equ BLACK,     0x00000000
 .equ WHITE,     0x00FFFFFF
 .equ CYAN,      0x0046878F
@@ -10,9 +12,10 @@
 .equ RED, 0x00FF0000
 
 .data
-    background: .word GB_LGREEN
-    foreground: .word GB_DGREEN
-    food:       .word RED
+    random_seed: .word RAND_SEED
+    background:  .word GB_LGREEN
+    foreground:  .word GB_DGREEN
+    food:        .word RED
     snek:
         .word GB_DGREEN
         .word SNEK_INITIAL_SIZE
@@ -25,6 +28,9 @@
 .globl main
 main:
     mov x20, x0 /* FRAMEBUFFER */
+
+    ldr x0, random_seed
+    bl srand
 
     adr x0, snek
     mov x1, SNEK_INITIAL_X
@@ -85,11 +91,23 @@ main:
     adr x0, snek
     bl new_food
 
-    mov x1, x0
+    mov x21, 20
+loop:
+    cbz x21, _loop
+
+    adr x0, snek
+    bl new_food
+
     mov x2, x1
+    mov x1, x0
     mov x0, x20
     ldr w3, food
     bl point
+
+    sub x21, x21, 1
+    b loop
+
+_loop:
 
 InfLoop:
     b InfLoop
