@@ -13,6 +13,10 @@
 
     Params:
         x0 - snek base address
+
+    Returns:
+        x0 - x pos
+        x1 - y pos
 */
 new_food:
     sub sp, sp, 80
@@ -27,15 +31,15 @@ new_food:
     str x27, [sp, 8]  /* random y */
     str lr,  [sp]
 
-    ldr w20, [x1, SNEK_CAPACITY_OFFSET]
-    ldr w21, [x1, SNEK_FRONT_OFFSET]
-    ldr w22, [x1, SNEK_SIZE_OFFSET]
+    ldr w20, [x0, SNEK_CAPACITY_OFFSET]
+    ldr w21, [x0, SNEK_FRONT_OFFSET]
+    ldr w22, [x0, SNEK_SIZE_OFFSET]
 
     movk x20, 0, lsl 32
     movk x21, 0, lsl 32
     movk x22, 0, lsl 32
 
-    add x19, x1, SNEK_ARRAY_OFFSET
+    add x19, x0, SNEK_ARRAY_OFFSET
 
 new_food_random:
     mov x23, xzr
@@ -75,8 +79,8 @@ new_food_continue:
     b new_food_loop
 
 _new_food:
-    mov x26, x0
-    mov x27, x1
+    mov x0, x26
+    mov x1, x27
 
     ldr lr,  [sp]
     ldr x27, [sp, 8]
