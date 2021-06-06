@@ -4,7 +4,7 @@
 .equ RAND_MAX, 0x7FFFFFFFFFFFFFFF
 
 .data
-    rseed: .dword 54124
+    rseed: .dword 1
 
 /*
     Subroutine: srand
@@ -139,7 +139,8 @@ _randrn:
         end > 0
 */
 randzn:
-    sub sp, sp, 8
+    sub sp, sp, 16
+    str x1, [sp, 8] /* needed by randrn */
     str lr, [sp]
 
     mov x1, x0
@@ -148,7 +149,8 @@ randzn:
 
 _randzn:
     ldr lr, [sp]
-    add sp, sp, 8
+    ldr x1, [sp, 8]
+    add sp, sp, 16
 
     ret
 
