@@ -21,8 +21,8 @@
     background:  .word GB_LGREEN
     foreground:  .word GB_DGREEN
     food_color:  .word RED
-    food_x:      .word 0
-    food_y:      .word 0
+    food_x:      .word 12
+    food_y:      .word 4
     snek:
         .word DIR_RIGHT
         .word GB_DGREEN
@@ -55,7 +55,6 @@ main:
 
     mov x0, x20
     adr x1, snek
-    b game_loop_init
 
 /*
     Subroutine: game_loop
@@ -67,11 +66,11 @@ main:
         x0 - framebuffer
         x1 - snek base address
 */
-game_loop_init:
+game_loop:
     mov x19, x0
     mov x20, x1
 
-game_loop:
+game_loop_init:
     mov x0, x20
     bl snek_head
 
@@ -141,21 +140,19 @@ game_loop_continue:
     mov x4, SNEK_BLOCK_PADDING
     bl block
 
-    movz x27, 0x0FFF, lsl 16
-    movk x27, 0xFFFF, lsl 0
+    movz x0, 0x0FFF, lsl 16
+    movk x0, 0xFFFF, lsl 0
     bl delay
 
-    b game_loop
+    b game_loop_init
 
 delay:
-    sub sp, sp, 8
-    str x19, [sp]
+    cbz x0, _delay_end
 
-    subs x19, x19, 1
-    bgt delay
+delay_loop:
+    nop
+    subs x0, x0, 1
+    bne delay_loop
 
-_delay:
-    ldr x19, [sp]
-    add sp, sp, 8
-
+_delay_end:
     ret
