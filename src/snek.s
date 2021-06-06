@@ -9,12 +9,13 @@
 .equ SNEK_INITIAL_Y,     4
 .equ SNEK_BLOCK_PADDING, SCALE_FACTOR / 10
 
-.equ SNEK_COLOR_OFFSET,    0
-.equ SNEK_SIZE_OFFSET,     4
-.equ SNEK_FRONT_OFFSET,    8
-.equ SNEK_REAR_OFFSET,     12
-.equ SNEK_CAPACITY_OFFSET, 16
-.equ SNEK_ARRAY_OFFSET,    20
+.equ SNEK_DIRECTION_OFFSET, 0
+.equ SNEK_COLOR_OFFSET,     4
+.equ SNEK_SIZE_OFFSET,      8
+.equ SNEK_FRONT_OFFSET,     12
+.equ SNEK_REAR_OFFSET,      16
+.equ SNEK_CAPACITY_OFFSET,  20
+.equ SNEK_ARRAY_OFFSET,     24
 
 /*
     A snek is a static array defined as follows:
@@ -177,8 +178,8 @@ _snek_pop:
         x0 - snek base address
 
     Return:
-        x0 - x
-        x1 - y
+        x1 - x
+        x2 - y
 */
 snek_head:
     sub sp, sp, 8
@@ -213,8 +214,8 @@ _snek_head:
         x0 - snek base address
 
     Return:
-        x0 - x
-        x1 - y
+        x1 - x
+        x2 - y
 */
 snek_last:
     sub sp, sp, 8

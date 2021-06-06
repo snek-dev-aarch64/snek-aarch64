@@ -1,3 +1,4 @@
+.gdb_history
 *.o
 memory_map.txt
 kernel8.list
