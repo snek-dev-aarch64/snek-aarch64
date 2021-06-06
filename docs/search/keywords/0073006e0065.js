@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("sne",["Function"],[["snek_head",,[[,,,,0,"File:snek.s:snek_head"]]],["snek_last",,[[,,,,0,"File:snek.s:snek_last"]]],["snek_push",,[[,,,,0,"File:snek.s:snek_push"]]]]);

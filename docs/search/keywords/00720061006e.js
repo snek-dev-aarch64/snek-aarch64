@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("ran",["Function"],[["rand",,[[,,,,0,"File:random.s:rand"]]],["randrn",,[[,,,,0,"File:random.s:randrn"]]],["randzn",,[[,,,,0,"File:random.s:randzn"]]]]);

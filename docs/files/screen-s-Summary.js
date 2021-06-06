@@ -1,0 +1,1 @@
+﻿NDFramePage.OnPageTitleLoaded("File:screen.s","screen.s");NDSummary.OnSummaryLoaded("File:screen.s",[["arm64-assembly","armassembly"]],[["Functions","Function"],["Groups","Group"]],[[1,0,1,"Functions","Functions"],[2,0,0,"pixel","pixel"],[3,0,0,"block","block"],[4,0,0,"point","point"],[5,0,0,"init_screen","init_screen"]]);

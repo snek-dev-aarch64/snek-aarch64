@@ -9,7 +9,7 @@
     Subroutine: new_food
 
     Brief:
-        Draw a new food
+        Generate random pair (x0,x1) that is not inside the snek's body
 
     Params:
         x0 - snek base address

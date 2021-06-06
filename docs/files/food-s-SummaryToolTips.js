@@ -1,0 +1,1 @@
+﻿NDSummary.OnToolTipsLoaded("File:food.s",{14:"<div class=\"NDToolTip TFunction Larmassembly\"><div id=\"NDPrototype14\" class=\"NDPrototype\"><div class=\"PSection PPlainSection\">new_food:</div></div><div class=\"TTSummary\">Draw a new food</div></div>"});

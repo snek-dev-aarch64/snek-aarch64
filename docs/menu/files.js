@@ -1,1 +1,1 @@
-﻿NDMenu.OnSectionLoaded("files.js",[[1,"app.s"]]);
+﻿NDMenu.OnSectionLoaded("files.js",[[1,"food.s"],[1,"random.s"],[1,"screen.s"],[1,"snek.s"]]);

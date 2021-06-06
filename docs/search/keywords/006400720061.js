@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("dra",["Function"],[["draw_snek",,[[,,,,0,"File:app.s:draw_snek"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("dra",["Function"],[["draw_snek",,[[,,,,0,"File:snek.s:draw_snek"]]]]);
