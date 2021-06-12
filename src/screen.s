@@ -132,6 +132,91 @@ _point:
     ret
 
 /*
+    Subroutine: circle
+
+    Brief:
+        Draw a circle inside a x3*x3 square, offsetted by x1 and x2 
+
+    Params:
+        x0 - framebuffer
+        x1 - x pos
+        x2 - y pos
+        x3 - radius
+        w4 - color
+*/
+
+circle:
+    sub sp, sp, 48
+    str x19, [sp, 40]
+    str x20, [sp, 32]
+    str x21, [sp, 24]
+    str x22, [sp, 16]
+    str x23, [sp, 8]
+    str lr,  [sp]
+
+    mov x19, x0
+    mov x20, x1
+    mov x21, x2
+    mov x22, x3
+
+    /* N = 2*r + 1 */
+    lsl x23, x3, 1
+    add x23, x23, 1
+
+    mov x9, xzr /* i = 0 */
+
+circle_loopi:
+    cmp x9, x23
+    beq _circle
+
+    mov x10, xzr
+
+circle_loopj:
+    sub x11, x9, x22  /* x = i - r */
+    sub x12, x10, x22 /* y = j - r */
+
+    mul x13, x11, x11 /* w = x * x */
+    mul x14, x12, x12 /* z = y * y */
+
+    /* v = r * r */
+    mul x15, x22, x22
+
+    /* x * x + y * y */
+    add x16, x13, x14
+
+    /* x * x + y * y > r * r*/
+    cmp x16, x15
+    bge circle_loopj_continue
+
+    mov x0, x19
+    mov x1, x11
+    add x1, x1, x20
+    mov x2, x12
+    add x2, x2, x21
+    mov w3, w4
+    bl pixel
+
+circle_loopj_continue:
+    add x10, x10, 1
+
+    cmp x10, x23
+    bne circle_loopj
+
+    add x9, x9, 1
+    b circle_loopi
+
+_circle:
+    ldr lr,  [sp]
+    ldr x23, [sp, 8]
+    ldr x22, [sp, 16]
+    ldr x21, [sp, 24]
+    ldr x20, [sp, 32]
+    ldr x19, [sp, 40]
+    add sp, sp, 48
+
+    ret
+
+/*
     Subroutine: init_screen
 
     Brief:
