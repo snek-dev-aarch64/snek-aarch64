@@ -117,6 +117,22 @@ snek_push:
     add x20, x0, SNEK_ARRAY_OFFSET
     add x20, x20, x19
 
+    /* signed modulus is kinda harder */
+    /* a % b = ((a % b) + b) % b */
+    mov  w21, MAX_WIDTH+1
+    sdiv w19, w1,  w21
+    msub w1,  w19, w21, w1
+    add  w1,  w1,  MAX_WIDTH+1
+    udiv w19, w1,  w21
+    msub w1,  w19, w21, w1
+
+    mov  w21, MAX_HEIGHT+1
+    sdiv w19, w2,  w21
+    msub w2,  w19, w21, w2
+    add  w2,  w2,  MAX_HEIGHT+1
+    udiv w19, w2,  w21
+    msub w2,  w19, w21, w2
+
     strh w1, [x20], 2
     strh w2, [x20]
 
