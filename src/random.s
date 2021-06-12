@@ -1,7 +1,7 @@
 .ifndef _RANDOM_S
 .equ    _RANDOM_S, 1
 
-.equ RAND_MAX, 0x7FFFFFFFFFFFFFFF
+.equ RAND_MAX, (1 << 63) - 1
 
 .data
     rseed: .dword 1
@@ -32,7 +32,7 @@ _srand:
     Subroutine: rand
 
     Brief:
-        Generate a pseudo-random integer based on the random seed
+        Generate a pseudo-random 64-bit integer based on the random seed
 
     Returns:
         x0 - pseudo-random result

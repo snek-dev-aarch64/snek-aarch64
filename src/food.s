@@ -15,8 +15,8 @@
         x0 - snek base address
 
     Returns:
-        x0 - x pos
-        x1 - y pos
+        x1 - x pos
+        x2 - y pos
 */
 new_food:
     sub sp, sp, 80
@@ -81,8 +81,8 @@ new_food_continue:
     b new_food_in_snake_loop
 
 _new_food:
-    mov x0, x26
-    mov x1, x27
+    mov x1, x26
+    mov x2, x27
 
     ldr lr,  [sp]
     ldr x27, [sp, 8]

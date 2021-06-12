@@ -35,7 +35,7 @@
 .text
 .globl main
 main:
-    mov x20, x0 /* FRAMEBUFFER */
+    mov x19, x0 /* FRAMEBUFFER */
 
     ldr x0, random_seed
     bl srand
@@ -45,19 +45,25 @@ main:
     mov x2, SNEK_INITIAL_Y
     bl init_snek
 
-    mov x0, x20
+    mov x0, x19
     ldr w3, background
     bl init_screen
 
-    mov x0, x20
+    mov x0, x19
     adr x1, snek
     bl draw_snek
 
-    mov x0, x20
+    mov x0, x19
+    ldr w1, food_x
+    ldr w2, food_y
+    ldr w3, food_color
+    bl point
+
+    mov x0, x19
     adr x1, snek
 
 /*
-    Subroutine: game_loop
+    game_loop
 
     Brief:
         Game's main loop
@@ -110,13 +116,32 @@ game_loop_food:
     mov x0, x20
     bl snek_head
 
-    ldr w21, food_x
-    ldr w22, food_y
+    ldr w12, food_x
+    ldr w13, food_y
 
-    cmp w1, w21
+    /* if snek in food generate new food */
+    cmp w1, w12
     bne game_loop_continue_pop
-    cmp w2, w22
-    bne game_loop_continue_pop
+    cmp w2, w13
+    beq game_loop_new_food
+
+    b game_loop_continue_pop
+
+game_loop_new_food:
+    mov x0, x20
+    bl new_food
+
+    adr x0, food_x
+    str w1, [x0]
+
+    adr x0, food_y
+    str w2, [x0]
+
+    mov x0, x19
+    ldr w1, food_x
+    ldr w2, food_y
+    ldr w3, food_color
+    bl point
 
     b game_loop_continue
 
@@ -140,7 +165,7 @@ game_loop_continue:
     mov x4, SNEK_BLOCK_PADDING
     bl block
 
-    movz x0, 0x0FFF, lsl 16
+    movz x0, 0x00FF, lsl 16
     movk x0, 0xFFFF, lsl 0
     bl delay
 
