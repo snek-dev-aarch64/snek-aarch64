@@ -75,212 +75,62 @@ FB_Init:
     str w0,[x1,MAIL_WRITE + MAIL_TAGS] /* Mail Box Write */
     ldr w0,[x2]                        /* W0 = Frame Buffer Pointer */
     cbz w0,FB_Init                     /* IF (Frame Buffer Pointer == Zero) Re-Initialize Frame Buffer */
-    and w0,w0,0x3FFFFFFF               /* Convert Mail Box Frame Buffer Pointer From BUS Address To Physical Address ($CXXXXXXX -> $3XXXXXXX) */
-    str w0,[x2]                        /* Store Frame Buffer Pointer Physical Address */
-    add w10,w0,wzr
-
-/* Core 0 Init the framebuffer */
-Serial_Init:
-    mov x0, UART0_CR
-    movk x0, MMIO_BASE_ALTA, lsl #16
-    str	wzr, [x0]                      /* UART0_CR = 0    turn off UART0 */
-
-    mov w0, #5
-    bl delay                           /* delay ~200 cycles */
-
-    ldr x0, =(UART_STRUCT + MAIL_TAGS)
-    ldr x1, =MAIL_BASE
-    orr x1, x1,PERIPHERAL_BASE
-    str w0, [x1,MAIL_WRITE + MAIL_TAGS] /* Mail Box Write UART config */
-
-
-/* Set UART0 to GPIO pins */
-    mov x0, GPFSEL1
-    movk x0, MMIO_BASE_ALTA, lsl #16
-    ldr	w19, [x0] 				/* Read GPFSEL1 */
-
-    and	w19, w19, #0xfffc0fff 	/* gpio14, gpio15 */
-
-    mov	w1, #0x4000
-    movk	w1, #0x2, lsl #16
-    orr	w19, w19, w1 			/* alt0 */
-
-    str	w19, [x0]				/* Modify GPFSEL1 */
-
-
-    mov x0, GPPUD
-    movk x0, MMIO_BASE_ALTA, lsl #16
-    str	wzr, [x0] /* GPPUD = 0; */
-
-    mov w0, #200
-    bl delay    /* delay ~200 cycles */
-
-    mov  x21, GPPUDCLK0
-    movk x21, MMIO_BASE_ALTA, lsl #16
-    mov	w19, #0xc000
-    str	w19, [x21] /* Set GPPUDCLK0 */
-
-    mov w0, #200
-    bl delay    /* delay ~200 cycles */
-
-    str	wzr, [x21] /* Set GPPUDCLK0 = 0 Flush gpio setup */
-
-    mov x0, UART0_ICR
-    movk x0, MMIO_BASE_ALTA, lsl #16
-    mov	w1, #0x7ff
-    str	w1, [x0] /* UART0_ICR = 0x7FF clear interrupts */
-
-    mov x0, UART0_IBRD
-    movk x0, MMIO_BASE_ALTA, lsl #16
-    mov	w1, #0x2
-    str	w1, [x0] /* 115200 baud */
-
-    mov x0, UART0_FBRD
-    movk x0, MMIO_BASE_ALTA, lsl #16
-    mov	w1, #0xB
-    str	w1, [x0]
-
-    mov x0, UART0_LCRH
-    movk x0, MMIO_BASE_ALTA, lsl #16
-    mov	w1, #0x60
-    str	w1, [x0] /* 8n1 */
-
-    mov x0, UART0_CR
-    movk x0, MMIO_BASE_ALTA, lsl #16
-    mov	w1, #0x301
-    str	w1, [x0] /* enable Tx, Rx, FIFO */
-
-
-    mov w0, w10 /* Restore FrameBuffer Pointer */
-    /* Core 0 branch to app */
-    b main
-
-delay:
-  cbz w0, _delay_end
-delay_loop:
-  nop
-  subs w0, w0, #1
-  bne delay_loop
-_delay_end:
-  ret
-
-
+    and w0,w0,0x3FFFFFFF               /*  Convert Mail Box Frame Buffer Pointer From BUS Address To Physical Address ($CXXXXXXX -> $3XXXXXXX) */
+  str w0,[x2]          /* Store Frame Buffer Pointer Physical Address */
+  add w10,w0,wzr
+  b main
 
 .align 16
 FB_STRUCT: /* Mailbox Property Interface Buffer Structure */
-    .word FB_STRUCT_END - FB_STRUCT /* Buffer Size In Bytes (Including The Header Values, The End Tag And Padding) */
-    .word 0x00000000 /* Buffer Request/Response Code */
-    /* Request Codes: $00000000 Process Request Response Codes: $80000000 Request Successful, $80000001 Partial Response */
-    /* Sequence Of Concatenated Tags */
-    .word Set_Physical_Display /* Tag Identifier */
-    .word 0x00000008 /* Value Buffer Size In Bytes */
-    .word 0x00000008 /* 1 bit (MSB) Request/Response Indicator (0=Request, 1=Response), 31 bits (LSB) Value Length In Bytes */
-    .word SCREEN_WIDTH /* Value Buffer */
-    .word SCREEN_HEIGHT /* Value Buffer */
+  .word FB_STRUCT_END - FB_STRUCT /* Buffer Size In Bytes (Including The Header Values, The End Tag And Padding) */
+  .word 0x00000000 /*  Buffer Request/Response Code */
+  /* Request Codes: $00000000 Process Request Response Codes: $80000000 Request Successful, $80000001 Partial Response */
+  /* Sequence Of Concatenated Tags */
+  .word Set_Physical_Display /* Tag Identifier */
+  .word 0x00000008 /* Value Buffer Size In Bytes */
+  .word 0x00000008 /* 1 bit (MSB) Request/Response Indicator (0=Request, 1=Response), 31 bits (LSB) Value Length In Bytes */
+  .word SCREEN_WIDTH /* Value Buffer */
+  .word SCREEN_HEIGHT /* Value Buffer */
 
-    .word Set_Virtual_Buffer /* Tag Identifier */
-    .word 0x00000008 /* Value Buffer Size In Bytes */
-    .word 0x00000008 /* 1 bit (MSB) Request/Response Indicator (0=Request, 1=Response), 31 bits (LSB) Value Length In Bytes */
-    .word SCREEN_WIDTH /* Value Buffer */
-    .word SCREEN_HEIGHT /* Value Buffer */
+  .word Set_Virtual_Buffer /* Tag Identifier */
+  .word 0x00000008 /* Value Buffer Size In Bytes */
+  .word 0x00000008 /* 1 bit (MSB) Request/Response Indicator (0=Request, 1=Response), 31 bits (LSB) Value Length In Bytes */
+  .word SCREEN_WIDTH /*  alue Buffer */
+  .word SCREEN_HEIGHT /* Value Buffer */
 
-    .word Set_Virtual_Offset /* Tag Identifier */
-    .word 0x00000008 /* Value Buffer Size In Bytes */
-    .word 0x00000008 /* 1 bit (MSB) Request/Response Indicator (0=Request, 1=Response), 31 bits (LSB) Value Length In Bytes */
+  .word Set_Virtual_Offset /* Tag Identifier */
+  .word 0x00000008 /* Value Buffer Size In Bytes */
+  .word 0x00000008 /* 1 bit (MSB) Request/Response Indicator (0=Request, 1=Response), 31 bits (LSB) Value Length In Bytes */
 FB_OFFSET_X:
-    .word 0 /* Value Buffer */
+  .word 0 /* Value Buffer */
 FB_OFFSET_Y:
-    .word 0 /* Value Buffer */
+  .word 0 /* Value Buffer */
 
-    .word Set_Depth /* Tag Identifier */
-    .word 0x00000004 /* Value Buffer Size In Bytes */
-    .word 0x00000004 /* 1 bit (MSB) Request/Response Indicator (0=Request, 1=Response), 31 bits (LSB) Value Length In Bytes */
-    .word BITS_PER_PIXEL /* Value Buffer */
+  .word Set_Depth /* Tag Identifier */
+  .word 0x00000004 /* Value Buffer Size In Bytes */
+  .word 0x00000004 /* 1 bit (MSB) Request/Response Indicator (0=Request, 1=Response), 31 bits (LSB) Value Length In Bytes */
+  .word BITS_PER_PIXEL /* Value Buffer */
 
-    .word 0x48006 		/* Tag Identifier */
-    .word 0x00000004 		/* Value Buffer Size In Bytes */
-    .word 0x00000004 		/* 1 bit (MSB) Request/Response Indicator (0=Request, 1=Response), 31 bits (LSB) Value Length In Bytes */
-    .word 0 			/* RGB, not BGR preferably */
+  .word 0x48006 		/* Tag Identifier */
+  .word 0x00000004 		/* Value Buffer Size In Bytes */
+  .word 0x00000004 		/* 1 bit (MSB) Request/Response Indicator (0=Request, 1=Response), 31 bits (LSB) Value Length In Bytes */
+  .word 0 			/* RGB, not BGR preferably */
 
-     .word Set_Palette /* Tag Identifier */
-     .word 0x00000010 /* Value Buffer Size In Bytes */
-     .word 0x00000010 /* 1 bit (MSB) Request/Response Indicator (0=Request, 1=Response), 31 bits (LSB) Value Length In Bytes */
-     .word 0 /* Value Buffer (Offset: First Palette Index To Set (0-255)) */
-     .word 2 /* Value Buffer (Length: Number Of Palette Entries To Set (1-256)) */
+   .word Set_Palette /* Tag Identifier */
+   .word 0x00000010  /* Value Buffer Size In Bytes */
+   .word 0x00000010  /* 1 bit (MSB) Request/Response Indicator (0=Request, 1=Response), 31 bits (LSB) Value Length In Bytes */
+   .word 0 /* Value Buffer (Offset: First Palette Index To Set (0-255)) */
+   .word 2 /* Value Buffer (Length: Number Of Palette Entries To Set (1-256)) */
 FB_PAL:
-     .word 0x00000000,0xFFFFFFFF /* RGBA Palette Values (Offset To Offset+Length-1) */
+  .word 0x00000000,0xFFFFFFFF /* RGBA Palette Values (Offset To Offset+Length-1) */
 
-    .word Get_Allocate_Buffer /* Tag Identifier */
-    .word 0x00000008 /* Value Buffer Size In Bytes */
-    .word 0x00000008 /* 1 bit (MSB) Request/Response Indicator (0=Request, 1=Response), 31 bits (LSB) Value Length In Bytes */
+  .word Get_Allocate_Buffer /* Tag Identifier */
+  .word 0x00000008 /* Value Buffer Size In Bytes */
+  .word 0x00000008 /* 1 bit (MSB) Request/Response Indicator (0=Request, 1=Response), 31 bits (LSB) Value Length In Bytes */
 FB_POINTER:
-    .word 0 		 /* FrameBuffer Pointer */
+  .word 0 		 /* FrameBuffer Pointer */
 FB_SIZE:
-    .word 0 		 /* FrameBuffer Size */
+  .word 0 		 /* FrameBuffer Size */
 
-    .word 0x00000000 /* $0 (End Tag) */
+  .word 0x00000000 /* $0 (End Tag) */
 FB_STRUCT_END:
-
-
-
-.align 16
-UART_STRUCT: /* Mailbox Property Interface Buffer Structure */
-    .word UART_STRUCT_END - UART_STRUCT /* Buffer Size In Bytes (Including The Header Values, The End Tag And Padding) */
-    .word 0x00000000 /* Buffer Request/Response Code */
-    /* Request Codes: $00000000 Process Request Response Codes: $80000000 Request Successful, $80000001 Partial Response */
-    /* Sequence Of Concatenated Tags */
-    .word Set_ClkRate /* Tag Identifier */
-    .word 12
-    .word 9
-    .word 2 /* UART CLK */
-    .word 4000000 /* UART at 4Mhz */
-    .word 0 /* UART Clear Turbo */
-
-    .word 0x00000000 /* $0 (End Tag) */
-UART_STRUCT_END:
-
-
-.globl uart_putc
-uart_putc:
-      sub sp, sp, #16
-      str x2, [sp, 8]
-      str x1, [sp, 0]
-    /* wait until we can send */
-    mov x1, UART0_FR
-    movk x1, MMIO_BASE_ALTA, lsl #16
-_uart_putc_loop:
-    nop
-    ldr	w2, [x1]      /* UART0_ICR = 0x7FF clear interrupts */
-      tbnz x2, 5, _uart_putc_loop	/* If bit 5 is not zero, loop */
-
-    mov x1, UART0_DR
-    movk x1, MMIO_BASE_ALTA, lsl #16
-    ldr	w0, [x1]      /* Send char in UART0_DR */
-
-      ldr x1, [sp, 0]
-      ldr x2, [sp, 8]
-      add sp, sp, #16
-    ret
-
-
-.globl uart_puts
-uart_puts:
-      sub sp, sp, #16
-      str x2, [sp, 8]
-      str x1, [sp, 0]
-    /* wait until we can send */
-    mov x1, UART0_FR
-    movk x1, MMIO_BASE_ALTA, lsl #16
-_uart_puts_loop:
-    nop
-    ldr	w2, [x1]                  /* UART0_ICR = 0x7FF clear interrupts */
-      tbnz x2, 5, _uart_putc_loop /* If bit 5 is not zero, loop */
-
-    mov x1, UART0_DR
-    movk x1, MMIO_BASE_ALTA, lsl #16
-    ldr	w0, [x1] /* Send char in UART0_DR */
-
-      ldr x1, [sp, 0]
-      ldr x2, [sp, 8]
-      add sp, sp, #16
-    ret
