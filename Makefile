@@ -12,7 +12,7 @@ start.o:  $(SRC_DIR)start.s screen.o
 app.o:    $(SRC_DIR)app.s screen.o snek.o random.o food.o tile.o
 food.o:   $(SRC_DIR)food.s screen.o snek.o random.o
 snek.o:   $(SRC_DIR)snek.s screen.o
-screen.o: $(SRC_DIR)screen.s
+screen.o: $(SRC_DIR)screen.s tile.o
 random.o: $(SRC_DIR)random.s
 tile.o:   $(SRC_DIR)tile.s screen.o random.o
 

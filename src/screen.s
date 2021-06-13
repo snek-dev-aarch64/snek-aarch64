@@ -1,10 +1,12 @@
 .ifndef _SCREEN_S
 .equ    _SCREEN_S, 1
 
+.include "src/tile.s"
+
 .equ SCREEN_WIDTH, 	 640
 .equ SCREEN_HEIGHT,	 480
 .equ BITS_PER_PIXEL, 32
-.equ SCALE_FACTOR,   20
+.equ SCALE_FACTOR,   16
 .equ MAX_WIDTH,      SCREEN_WIDTH / SCALE_FACTOR - 1
 .equ MAX_HEIGHT,     SCREEN_HEIGHT / SCALE_FACTOR - 1
 
@@ -52,7 +54,6 @@ _pixel:
     Notes:
         The block coords should be choosen from 0,0 to MAX_WIDTH,MAX_HEIGHT
 */
-
 block:
     sub sp, sp, 48
     str x19, [sp, 40]
@@ -144,7 +145,6 @@ _point:
         x3 - radius
         w4 - color
 */
-
 circle:
     sub sp, sp, 48
     str x19, [sp, 40]
@@ -217,6 +217,65 @@ _circle:
     ret
 
 /*
+    Subroutine: rect
+
+    Brief:
+        Draw a rect given (x min, y min) and (x max, y max)
+
+    Params:
+        x0 - framebuffer
+        x1 - x min
+        x2 - y min
+        x3 - x max
+        x4 - y max
+        w5 - color
+*/
+rect:
+    sub sp, sp, 48
+    str x19, [sp, 40]
+    str x20, [sp, 32]
+    str x21, [sp, 24]
+    str x22, [sp, 16]
+    str x23, [sp, 8]
+    str lr,  [sp]
+
+    mov x20, x1 /* x min */
+    mov x21, x2 /* y min */
+
+    mov x22, x3 /* x max */
+    mov x23, x4 /* y max */
+
+rect_loopx:
+    cmp x20, x22 /* If x min >= x max */
+    bge _rect
+
+    mov x19, x21
+
+rect_loopy:
+    mov x1, x20
+    mov x2, x19
+    mov w3, w5
+    bl pixel
+
+    add x19, x19, 1
+    cmp x19, x23
+    blt rect_loopy
+
+    add x20, x20, 1
+    b rect_loopx
+
+_rect:
+    ldr lr,  [sp]
+    ldr x23, [sp, 8]
+    ldr x22, [sp, 16]
+    ldr x21, [sp, 24]
+    ldr x20, [sp, 32]
+    ldr x19, [sp, 40]
+    add sp, sp, 48
+
+    ret
+
+/*
     Subroutine: init_screen
 
     Brief:
@@ -224,37 +283,53 @@ _circle:
 
     Params:
         x0 - framebuffer
-        w3 - color
 */
 init_screen:
-    sub sp, sp, 24
-    str x19, [sp, 16]
-    str x20, [sp, 8]
+    sub sp, sp, 56
+    str x19, [sp, 48]
+    str x20, [sp, 40]
+    str x21, [sp, 32]
+    str x22, [sp, 24]
+    str x23, [sp, 16]
+    str x24, [sp, 8]
     str lr,  [sp]
 
-    mov x19, #SCREEN_WIDTH-1
+    mov x20, xzr /* x min */
+    mov x21, xzr /* y min */
+
+    mov x22, MAX_WIDTH + 1  /* x max */
+    mov x23, MAX_HEIGHT + 1 /* y max */
+
+    mov x24, x0
+
 init_screen_loopx:
-    cmp x19, 0
-    blt _init_screen
+    cmp x20, x22 /* If x min >= x max */
+    bge _init_screen
 
-    mov x20, #SCREEN_HEIGHT-1
+    mov x19, x21
+
 init_screen_loopy:
-    mov x1, x19
-    mov x2, x20
-    bl pixel
+    mov x0, x24
+    mov x1, x20
+    mov x2, x19
+    bl tile
 
-    sub x20, x20, 1
-    cmp x20, 0
-    bge init_screen_loopy
+    add x19, x19, 1
+    cmp x19, x23
+    blt init_screen_loopy
 
-    sub x19, x19, 1
+    add x20, x20, 1
     b init_screen_loopx
 
 _init_screen:
     ldr lr,  [sp]
-    ldr x20, [sp, 8]
-    ldr x19, [sp, 16]
-    add sp, sp, 24
+    ldr x24, [sp, 8]
+    ldr x23, [sp, 16]
+    ldr x22, [sp, 24]
+    ldr x21, [sp, 32]
+    ldr x20, [sp, 40]
+    ldr x19, [sp, 48]
+    add sp, sp, 56
 
     ret
 

@@ -4,6 +4,8 @@
 .include "src/screen.s"
 .include "src/random.s"
 
+.equ PARTICLE_SIZE, SCALE_FACTOR
+
 .equ DARK,   0x00111111
 .equ DARKER, 0x00222222
 .equ SAND,   0x00FBD48F
@@ -76,13 +78,16 @@ tile_loopx_continue:
     mov x0, x24
     mov x1, x20
     mov x2, x19
-    bl pixel
+    mov w5, w3
+    add x3, x20, PARTICLE_SIZE
+    add x4, x19, PARTICLE_SIZE
+    bl rect
 
-    add x19, x19, 1
+    add x19, x19, PARTICLE_SIZE
     cmp x19, x23
     blt tile_loopy
 
-    add x20, x20, 1
+    add x20, x20, PARTICLE_SIZE
     b tile_loopx
 
 _tile:

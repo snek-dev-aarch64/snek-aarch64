@@ -1,10 +1,11 @@
 .include "src/screen.s"
 .include "src/snek.s"
 .include "src/food.s"
+.include "src/tile.s"
 
-.equ RAND_SEED, 547238
+.equ RAND_SEED, 0x020800
 
-.equ BLOCK_PADDING, SCALE_FACTOR/10
+.equ BLOCK_PADDING, SCALE_FACTOR / 10
 
 .equ BLACK,     0x00000000
 .equ WHITE,     0x00FFFFFF
@@ -19,12 +20,12 @@
 .equ DIR_LEFT,  -2
 
 .data
-    random_seed: .word RAND_SEED
-    background:  .word GB_LGREEN
-    foreground:  .word GB_DGREEN
-    food_color:  .word RED
-    food_x:      .word 12
-    food_y:      .word 4
+    random_seed: .dword RAND_SEED
+    background:  .word  GB_LGREEN
+    foreground:  .word  GB_DGREEN
+    food_color:  .word  RED
+    food_x:      .word  12
+    food_y:      .word  4
     snek:
         .word DIR_UP
         .word GB_DGREEN
@@ -48,7 +49,6 @@ main:
     bl init_snek
 
     mov x0, x19
-    ldr w3, background
     bl init_screen
 
     mov x0, x19
@@ -164,8 +164,7 @@ game_loop_continue_pop:
     bl snek_last
 
     mov x0, x19
-    ldr w3, background
-    bl point
+    bl tile
 
     mov x0, x20
     bl snek_pop
