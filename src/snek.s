@@ -20,10 +20,11 @@
 /*
     A snek is a static array defined as follows:
     snek:
-        .word (color)
+        .word DIR_X               (direction)
+        .word 0x...               (color)
         .word SNEK_INITIAL_SIZE   (size)
         .word 0                   (front)
-        .word SNEK_MAXIMUM_SIZE-1 (rear)
+        .word SNEK_INITIAL_SIZE-1 (rear)
         .word SNEK_MAXIMUM_SIZE   (capacity)
         .skip 4*SNEK_MAXIMUM_SIZE (coord array)
 
@@ -98,21 +99,21 @@ snek_push:
     str x21, [sp]
 
     ldr w19, [x0, SNEK_SIZE_OFFSET]
-    add  w19, w19, 1
+    add w19, w19, 1
     str w19, [x0, SNEK_SIZE_OFFSET]
 
     ldr w19, [x0, SNEK_REAR_OFFSET]
     ldr w20, [x0, SNEK_CAPACITY_OFFSET]
 
     /* REAR = (REAR + 1) % CAPACITY */
-    add w19, w19, 1         /* REAR = REAR + 1 */
-    udiv w21, w19, w20      /* w21 = REAR // CAPACITY */
-    msub w19, w21, w20, w19 /* REAR = REAR - (w21*CAPACITY) */
+    add  w19, w19, 1         /* REAR = REAR + 1 */
+    udiv w21, w19, w20       /* w21 = REAR // CAPACITY */
+    msub w19, w21, w20, w19  /* REAR = REAR - (w21*CAPACITY) */
 
     str w19, [x0, SNEK_REAR_OFFSET]
 
     movk x19, 0, lsl 32
-    lsl x19, x19, 2
+    lsl  x19, x19, 2
 
     add x20, x0, SNEK_ARRAY_OFFSET
     add x20, x20, x19
@@ -194,8 +195,8 @@ _snek_pop:
         x0 - snek base address
 
     Return:
-        x1 - x
-        x2 - y
+        x1 - x pos
+        x2 - y pos
 */
 snek_head:
     sub sp, sp, 8
@@ -230,8 +231,8 @@ _snek_head:
         x0 - snek base address
 
     Return:
-        x1 - x
-        x2 - y
+        x1 - x pos
+        x2 - y pos
 */
 snek_last:
     sub sp, sp, 8
@@ -252,6 +253,70 @@ snek_last:
 
 _snek_last:
     ldr x19, [sp]
+    add sp, sp, 8
+
+    ret
+
+/*
+    Subroutine: snek_is_ded
+
+    Brief:
+        Check if the snek is ded
+
+    Params:
+        x0 - snek base address
+
+    Returns:
+        x0 - 1 if true | 0 if false
+*/
+snek_is_ded:
+    sub sp, sp, 8
+    str lr, [sp]
+
+    ldr w9,  [x0, SNEK_SIZE_OFFSET]
+    ldr w10, [x0, SNEK_FRONT_OFFSET]
+    ldr w11, [x0, SNEK_CAPACITY_OFFSET]
+
+    sub w9, w9, 1
+
+    movk x9,  0, lsl 32
+    movk x10, 0, lsl 32
+    movk x11, 0, lsl 32
+
+    add x12, x0, SNEK_ARRAY_OFFSET
+
+    bl snek_head
+
+    mov x0,  xzr
+    mov x13, xzr
+snek_is_ded_loop:
+    cmp x9, x13  /* i == size */
+    beq _snek_is_ded
+
+    add  x14, x13, x10      /* j = FRONT + i */
+    udiv x15, x14, x11      /* jtemp = j // CAPACITY */
+    msub x14, x15, x11, x14 /* j = (FRONT + i) % CAPACITY */
+
+    lsl  x14, x14, 2
+    ldrh w15, [x12, x14]
+    cmp  w1, w15
+    bne  snek_is_ded_continue
+
+    add  x14, x14, 2
+    ldrh w15, [x12, x14]
+    cmp  w2, w15
+    beq  snek_is_deffinetly_ded
+
+snek_is_ded_continue:
+    add x13, x13, 1
+
+    b snek_is_ded_loop
+
+snek_is_deffinetly_ded:
+    mov x0, 1
+
+_snek_is_ded:
+    ldr lr, [sp]
     add sp, sp, 8
 
     ret
