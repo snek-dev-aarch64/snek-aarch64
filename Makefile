@@ -9,12 +9,11 @@ ASM_OBJS = $(patsubst $(SRC_DIR)%.s,%.o,$(ASM_SRCS))
 all: kernel8.img
 
 start.o:  $(SRC_DIR)start.s screen.o
-app.o:    $(SRC_DIR)app.s screen.o snek.o random.o food.o tile.o
+app.o:    $(SRC_DIR)app.s screen.o snek.o random.o food.o
 food.o:   $(SRC_DIR)food.s screen.o snek.o random.o
+screen.o: $(SRC_DIR)screen.s random.o
 snek.o:   $(SRC_DIR)snek.s screen.o
-screen.o: $(SRC_DIR)screen.s tile.o
 random.o: $(SRC_DIR)random.s
-tile.o:   $(SRC_DIR)tile.s screen.o random.o
 
 $(ASM_OBJS):
 	$(ARMGNU)-as $(AOPS) $< -o $@
