@@ -1,9 +1,8 @@
 .include "src/screen.s"
 .include "src/snek.s"
 .include "src/food.s"
-.include "src/tile.s"
 
-.equ RAND_SEED, 0x020800
+.equ RAND_SEED, 0x1EA7A55
 
 .equ BLOCK_PADDING, SCALE_FACTOR / 10
 
