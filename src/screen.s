@@ -217,6 +217,41 @@ _circle:
     ret
 
 /*
+    Subroutine: circle
+
+    Brief:
+        Draw a tile with a centered circle
+
+    Params:
+        x0 - framebuffer
+        x1 - x pos
+        x2 - y pos
+        w3 - color
+*/
+tiled_circle:
+    sub sp, sp, 16
+    str x19, [sp, 8]
+    str lr,  [sp]
+
+    mov x19, SCALE_FACTOR
+    mov w4, w3
+    mov x3, (SCALE_FACTOR >> 1) - (SCALE_FACTOR / 10)
+    mul x1, x1, x19
+    add x1, x1, x3
+    add x1, x1, SCALE_FACTOR / 10
+    mul x2, x2, x19
+    add x2, x2, x3
+    add x2, x2, SCALE_FACTOR / 10
+    bl circle
+
+_tiled_circle:
+    ldr lr,  [sp]
+    ldr x19, [sp, 8]
+    add sp, sp, 16
+
+    ret
+
+/*
     Subroutine: rect
 
     Brief:

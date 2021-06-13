@@ -59,8 +59,7 @@ main:
     ldr w1, food_x
     ldr w2, food_y
     ldr w3, food_color
-    mov x4, BLOCK_PADDING
-    bl block
+    bl tiled_circle
 
     mov x0, x19
     adr x1, snek
@@ -146,11 +145,8 @@ game_loop_new_food:
     str w2, [x0]
 
     mov x0, x19
-    ldr w1, food_x
-    ldr w2, food_y
     ldr w3, food_color
-    mov x4, BLOCK_PADDING
-    bl block
+    bl tiled_circle
 
     /* if max size is eq to capacity win */
     ldr w0, [x20, SNEK_SIZE_OFFSET]
