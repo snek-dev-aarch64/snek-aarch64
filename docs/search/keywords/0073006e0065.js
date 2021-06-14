@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("sne",["Function"],[["snek_head",,[[,,,,0,"File:snek.s:snek_head"]]],["snek_is_ded",,[[,,,,0,"File:snek.s:snek_is_ded"]]],["snek_last",,[[,,,,0,"File:snek.s:snek_last"]]],["snek_pop",,[[,,,,0,"File:snek.s:snek_pop"]]],["snek_push",,[[,,,,0,"File:snek.s:snek_push"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("sne",["Function"],[["snek_draw_head",,[[,,,,0,"File:snek.s:snek_draw_head"]]],["snek_head",,[[,,,,0,"File:snek.s:snek_head"]]],["snek_push",,[[,,,,0,"File:snek.s:snek_push"]]]]);

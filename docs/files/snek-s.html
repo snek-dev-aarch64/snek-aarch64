@@ -8,49 +8,37 @@
 
 <body onload="NDLoader.OnLoad('Content');" class="NDPage NDContentPage">
 
-<a name="Functions"></a><a name="Topic1"></a><div class="CTopic TGroup Larmassembly first">
+<a name="Functions"></a><a name="Topic6"></a><div class="CTopic TGroup Larmassembly first">
  <div class="CTitle">Functions</div>
 </div>
 
-<a name="init_snek"></a><a name="Topic2"></a><div class="CTopic TFunction Larmassembly">
+<a name="init_snek"></a><a name="Topic7"></a><div class="CTopic TFunction Larmassembly">
  <div class="CTitle">init_snek</div>
- <div id="NDPrototype2" class="NDPrototype"><div class="PSection PPlainSection">init_snek:</div></div>
+ <div id="NDPrototype7" class="NDPrototype"><div class="PSection PPlainSection">init_snek:</div></div>
  <div class="CBody"><div class="CHeading">Brief</div><p>Initialize snek with SNEK_INITIAL_SIZE</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>snek base address</p></td></tr><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>x pos</p></td></tr><tr><td class="CDLEntry">x2</td><td class="CDLDefinition"><p>y pos</p></td></tr></table></div>
 </div>
 
-<a name="snek_push"></a><a name="Topic6"></a><div class="CTopic TFunction Larmassembly">
+<a name="snek_push"></a><a name="Topic8"></a><div class="CTopic TFunction Larmassembly">
  <div class="CTitle">snek_push</div>
- <div id="NDPrototype6" class="NDPrototype"><div class="PSection PPlainSection">snek_push:</div></div>
+ <div id="NDPrototype8" class="NDPrototype"><div class="PSection PPlainSection">snek_push:</div></div>
  <div class="CBody"><div class="CHeading">Brief</div><p>Push a coord pair into the snek</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>snek base address</p></td></tr><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>x pos</p></td></tr><tr><td class="CDLEntry">x2</td><td class="CDLDefinition"><p>y pos</p></td></tr></table><div class="CHeading">Notes</div><p>The size of the snek should be less than its capacity</p></div>
 </div>
 
-<a name="snek_pop"></a><a name="Topic14"></a><div class="CTopic TFunction Larmassembly">
- <div class="CTitle">snek_pop</div>
- <div id="NDPrototype14" class="NDPrototype"><div class="PSection PPlainSection">snek_pop:</div></div>
- <div class="CBody"><div class="CHeading">Brief</div><p>Pop a coord pair from the snek</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>snek base address</p></td></tr></table><div class="CHeading">Notes</div><p>The snek array should not be empty</p></div>
-</div>
-
-<a name="snek_head"></a><a name="Topic7"></a><div class="CTopic TFunction Larmassembly">
+<a name="snek_head"></a><a name="Topic14"></a><div class="CTopic TFunction Larmassembly">
  <div class="CTitle">snek_head</div>
- <div id="NDPrototype7" class="NDPrototype"><div class="PSection PPlainSection">snek_head:</div></div>
+ <div id="NDPrototype14" class="NDPrototype"><div class="PSection PPlainSection">snek_head:</div></div>
  <div class="CBody"><div class="CHeading">Brief</div><p>Return the 'head' pair of the snek queue</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>snek base address</p></td></tr></table><div class="CHeading">Return</div><table class="CDefinitionList"><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>x pos</p></td></tr><tr><td class="CDLEntry">x2</td><td class="CDLDefinition"><p>y pos</p></td></tr></table></div>
 </div>
 
-<a name="snek_last"></a><a name="Topic29"></a><div class="CTopic TFunction Larmassembly">
- <div class="CTitle">snek_last</div>
- <div id="NDPrototype29" class="NDPrototype"><div class="PSection PPlainSection">snek_last:</div></div>
- <div class="CBody"><div class="CHeading">Brief</div><p>Return the 'tail' pair of the snek queue</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>snek base address</p></td></tr></table><div class="CHeading">Return</div><table class="CDefinitionList"><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>x pos</p></td></tr><tr><td class="CDLEntry">x2</td><td class="CDLDefinition"><p>y pos</p></td></tr></table></div>
+<a name="snek_draw_head"></a><a name="Topic17"></a><div class="CTopic TFunction Larmassembly">
+ <div class="CTitle">snek_draw_head</div>
+ <div id="NDPrototype17" class="NDPrototype"><div class="PSection PPlainSection">snek_draw_head:</div></div>
+ <div class="CBody"><div class="CHeading">Brief</div><p>Draw the head of the snek</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>snek base address</p></td></tr><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>framebuffer</p></td></tr></table></div>
 </div>
 
-<a name="snek_is_ded"></a><a name="Topic19"></a><div class="CTopic TFunction Larmassembly">
- <div class="CTitle">snek_is_ded</div>
- <div id="NDPrototype19" class="NDPrototype"><div class="PSection PPlainSection">snek_is_ded:</div></div>
- <div class="CBody"><div class="CHeading">Brief</div><p>Check if the snek is ded</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>snek base address</p></td></tr></table><div class="CHeading">Returns</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>1 if true | 0 if false</p></td></tr></table></div>
-</div>
-
-<a name="draw_snek"></a><a name="Topic20"></a><div class="CTopic TFunction Larmassembly last">
+<a name="draw_snek"></a><a name="Topic12"></a><div class="CTopic TFunction Larmassembly last">
  <div class="CTitle">draw_snek</div>
- <div id="NDPrototype20" class="NDPrototype"><div class="PSection PPlainSection">draw_snek:</div></div>
+ <div id="NDPrototype12" class="NDPrototype"><div class="PSection PPlainSection">draw_snek:</div></div>
  <div class="CBody"><div class="CHeading">Brief</div><p>Draw a snek on the screen</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>framebuffer</p></td></tr><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>snek base address</p></td></tr></table></div>
 </div>
 

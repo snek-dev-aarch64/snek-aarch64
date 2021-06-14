@@ -1,1 +1,0 @@
-﻿NDSummary.OnToolTipsLoaded("File:food.s",{9:"<div class=\"NDToolTip TFunction Larmassembly\"><div id=\"NDPrototype9\" class=\"NDPrototype\"><div class=\"PSection PPlainSection\">new_food:</div></div><div class=\"TTSummary\">Generate random pair (x0,x1) that is not inside the snek\'s body</div></div>"});
