@@ -180,7 +180,7 @@ game_loop_continue:
     bl   snek_is_ded
     cbnz x0, oh_im_die_thank_you_forever
 
-    movz x0, 0x00FF, lsl 16
+    movz x0, 0x01FF, lsl 16
     movk x0, 0xFFFF, lsl 0
     bl delay
 
