@@ -1,0 +1,1 @@
+﻿NDFramePage.OnPageTitleLoaded("File:app.s","app.s");NDSummary.OnSummaryLoaded("File:app.s",[["arm64-assembly","armassembly"]],[["Functions","Function"],["Groups","Group"]],[[3,0,1,"Functions","Functions"],[21,0,0,"ai_choose_path","ai_choose_path"],[22,0,0,"delay","delay"]]);

@@ -8,32 +8,56 @@
 
 <body onload="NDLoader.OnLoad('Content');" class="NDPage NDContentPage">
 
-<a name="Functions"></a><a name="Topic1"></a><div class="CTopic TGroup Larmassembly first">
+<a name="Functions"></a><a name="Topic4"></a><div class="CTopic TGroup Larmassembly first">
  <div class="CTitle">Functions</div>
 </div>
 
-<a name="pixel"></a><a name="Topic2"></a><div class="CTopic TFunction Larmassembly">
+<a name="pixel"></a><a name="Topic5"></a><div class="CTopic TFunction Larmassembly">
  <div class="CTitle">pixel</div>
- <div id="NDPrototype2" class="NDPrototype"><div class="PSection PPlainSection">pixel:</div></div>
+ <div id="NDPrototype5" class="NDPrototype"><div class="PSection PPlainSection">pixel:</div></div>
  <div class="CBody"><div class="CHeading">Brief</div><p>Draw a pixel into the framebuffer</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>framebuffer</p></td></tr><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>x pos</p></td></tr><tr><td class="CDLEntry">x2</td><td class="CDLDefinition"><p>y pos</p></td></tr><tr><td class="CDLEntry">w3</td><td class="CDLDefinition"><p>color</p></td></tr></table></div>
 </div>
 
-<a name="block"></a><a name="Topic3"></a><div class="CTopic TFunction Larmassembly">
+<a name="block"></a><a name="Topic10"></a><div class="CTopic TFunction Larmassembly">
  <div class="CTitle">block</div>
- <div id="NDPrototype3" class="NDPrototype"><div class="PSection PPlainSection">block:</div></div>
+ <div id="NDPrototype10" class="NDPrototype"><div class="PSection PPlainSection">block:</div></div>
  <div class="CBody"><div class="CHeading">Brief</div><p>Draw a block into the framebuffer based on the scale factor and on the provided padding</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>framebuffer</p></td></tr><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>x pos</p></td></tr><tr><td class="CDLEntry">x2</td><td class="CDLDefinition"><p>y pos</p></td></tr><tr><td class="CDLEntry">w3</td><td class="CDLDefinition"><p>color</p></td></tr><tr><td class="CDLEntry">x4</td><td class="CDLDefinition"><p>padding</p></td></tr></table><div class="CHeading">Notes</div><p>The block coords should be choosen from 0,0 to MAX_WIDTH,MAX_HEIGHT</p></div>
 </div>
 
-<a name="point"></a><a name="Topic4"></a><div class="CTopic TFunction Larmassembly">
+<a name="point"></a><a name="Topic11"></a><div class="CTopic TFunction Larmassembly">
  <div class="CTitle">point</div>
- <div id="NDPrototype4" class="NDPrototype"><div class="PSection PPlainSection">point:</div></div>
+ <div id="NDPrototype11" class="NDPrototype"><div class="PSection PPlainSection">point:</div></div>
  <div class="CBody"><div class="CHeading">Brief</div><p>Draw a block with padding=0px</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>framebuffer</p></td></tr><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>x pos</p></td></tr><tr><td class="CDLEntry">x2</td><td class="CDLDefinition"><p>y pos</p></td></tr><tr><td class="CDLEntry">w3</td><td class="CDLDefinition"><p>color</p></td></tr></table><div class="CHeading">Notes</div><p>The point coords should be choosen from 0,0 to MAX_WIDTH,MAX_HEIGHT</p></div>
 </div>
 
-<a name="init_screen"></a><a name="Topic5"></a><div class="CTopic TFunction Larmassembly last">
+<a name="rect"></a><a name="Topic28"></a><div class="CTopic TFunction Larmassembly">
+ <div class="CTitle">rect</div>
+ <div id="NDPrototype28" class="NDPrototype"><div class="PSection PPlainSection">rect:</div></div>
+ <div class="CBody"><div class="CHeading">Brief</div><p>Draw a rectangle given (x min, y min) and (x max, y max)</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>framebuffer</p></td></tr><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>x min</p></td></tr><tr><td class="CDLEntry">x2</td><td class="CDLDefinition"><p>y min</p></td></tr><tr><td class="CDLEntry">x3</td><td class="CDLDefinition"><p>x max</p></td></tr><tr><td class="CDLEntry">x4</td><td class="CDLDefinition"><p>y max</p></td></tr><tr><td class="CDLEntry">w5</td><td class="CDLDefinition"><p>color</p></td></tr></table></div>
+</div>
+
+<a name="tile"></a><a name="Topic16"></a><div class="CTopic TFunction Larmassembly">
+ <div class="CTitle">tile</div>
+ <div id="NDPrototype16" class="NDPrototype"><div class="PSection PPlainSection">tile:</div></div>
+ <div class="CBody"><div class="CHeading">Brief</div><p>Draw tile with random particles</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>framebuffer</p></td></tr><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>x pos</p></td></tr><tr><td class="CDLEntry">x2</td><td class="CDLDefinition"><p>y pos</p></td></tr></table></div>
+</div>
+
+<a name="circle"></a><a name="Topic12"></a><div class="CTopic TFunction Larmassembly">
+ <div class="CTitle">circle</div>
+ <div id="NDPrototype12" class="NDPrototype"><div class="PSection PPlainSection">circle:</div></div>
+ <div class="CBody"><div class="CHeading">Brief</div><p>Draw a circle inside a x3*x3 square, offsetted by x1 and x2</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>framebuffer</p></td></tr><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>x pos</p></td></tr><tr><td class="CDLEntry">x2</td><td class="CDLDefinition"><p>y pos</p></td></tr><tr><td class="CDLEntry">x3</td><td class="CDLDefinition"><p>radius</p></td></tr><tr><td class="CDLEntry">w4</td><td class="CDLDefinition"><p>color</p></td></tr></table></div>
+</div>
+
+<a name="tiled_circle"></a><a name="Topic13"></a><div class="CTopic TFunction Larmassembly">
+ <div class="CTitle">tiled_circle</div>
+ <div id="NDPrototype13" class="NDPrototype"><div class="PSection PPlainSection">tiled_circle:</div></div>
+ <div class="CBody"><div class="CHeading">Brief</div><p>Draw a tile with a centered circle</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>framebuffer</p></td></tr><tr><td class="CDLEntry">x1</td><td class="CDLDefinition"><p>x pos</p></td></tr><tr><td class="CDLEntry">x2</td><td class="CDLDefinition"><p>y pos</p></td></tr><tr><td class="CDLEntry">w3</td><td class="CDLDefinition"><p>color</p></td></tr></table></div>
+</div>
+
+<a name="init_screen"></a><a name="Topic15"></a><div class="CTopic TFunction Larmassembly last">
  <div class="CTitle">init_screen</div>
- <div id="NDPrototype5" class="NDPrototype"><div class="PSection PPlainSection">init_screen:</div></div>
- <div class="CBody"><div class="CHeading">Brief</div><p>Draw the entire screen with a color</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>framebuffer</p></td></tr><tr><td class="CDLEntry">w3</td><td class="CDLDefinition"><p>color</p></td></tr></table></div>
+ <div id="NDPrototype15" class="NDPrototype"><div class="PSection PPlainSection">init_screen:</div></div>
+ <div class="CBody"><div class="CHeading">Brief</div><p>Draw the entire screen with a color</p><div class="CHeading">Params</div><table class="CDefinitionList"><tr><td class="CDLEntry">x0</td><td class="CDLDefinition"><p>framebuffer</p></td></tr></table></div>
 </div>
 
 </body></html>
