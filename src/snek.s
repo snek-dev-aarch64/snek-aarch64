@@ -57,6 +57,14 @@ init_snek:
     mov x21, x2
     mov x22, xzr
 
+    str wzr, [x0, SNEK_FRONT_OFFSET]
+
+    mov w9, SNEK_INITIAL_SIZE
+    str w9, [x0, SNEK_SIZE_OFFSET]
+
+    mov w9, SNEK_INITIAL_SIZE-1
+    str w9, [x0, SNEK_REAR_OFFSET]
+
 init_snek_loop:
     cmp x22, SNEK_INITIAL_SIZE
     bge _init_snek
@@ -146,7 +154,7 @@ _snek_push:
     ret
 
 /*
-    Subroutine: snek_push
+    Subroutine: snek_pop
 
     Brief:
         Pop a coord pair from the snek
@@ -189,7 +197,7 @@ _snek_pop:
     Subroutine: snek_head
 
     Brief:
-        Return the first pair of the snek queue
+        Return the 'head' pair of the snek queue
 
     Params:
         x0 - snek base address
@@ -225,7 +233,7 @@ _snek_head:
     Subroutine: snek_last
 
     Brief:
-        Return the last pair of the snek queue
+        Return the 'tail' pair of the snek queue
 
     Params:
         x0 - snek base address

@@ -86,6 +86,7 @@ game_loop_init:
     mov x0, x20
     bl snek_head
 
+    /* based on the direction, move */
     ldr w21, [x20, SNEK_DIRECTION_OFFSET]
 
     cmp w21, DIR_UP
@@ -125,13 +126,14 @@ game_loop_snek_update:
     ldr w9,  food_x
     ldr w10, food_y
 
-    /* if snek in food generate new food */
+    /* if snek in food generate new food and don't remove it's tail */
     cmp w1, w9
-    bne game_loop_continue_pop
+    bne game_loop_pop
     cmp w2, w10
     beq game_loop_new_food
 
-    b game_loop_continue_pop
+    /* else, remove the tail and continue */
+    b game_loop_pop
 
 game_loop_new_food:
     mov x0, x20
@@ -147,14 +149,9 @@ game_loop_new_food:
     ldr w3, food_color
     bl tiled_circle
 
-    /* if max size is eq to capacity win */
-    ldr w0, [x20, SNEK_SIZE_OFFSET]
-    cmp w0, SNEK_MAXIMUM_SIZE-1
-    beq oh_im_die_thank_you_forever
-
     b game_loop_continue
 
-game_loop_continue_pop:
+game_loop_pop:
     mov x0, x20
     bl snek_last
 
@@ -170,9 +167,15 @@ game_loop_continue:
 
     mov x0, x19
     ldr w3, [x20, SNEK_COLOR_OFFSET]
-    mov x4, BLOCK_PADDING
+    mov x4, SNEK_BLOCK_PADDING
     bl block
 
+    /* if max size is eq to capacity win */
+    ldr w0, [x20, SNEK_SIZE_OFFSET]
+    cmp w0, SNEK_MAXIMUM_SIZE-1
+    beq infloop
+
+    /* if the snake eats it's body it dies */
     mov  x0, x20
     bl   snek_is_ded
     cbnz x0, oh_im_die_thank_you_forever
@@ -184,7 +187,9 @@ game_loop_continue:
     b game_loop_init
 
 oh_im_die_thank_you_forever:
-    b oh_im_die_thank_you_forever
+
+infloop:
+    b infloop
 
 /*
     Subroutine: ai_choose_path
@@ -239,13 +244,13 @@ ai_go_right:
 ai_go_left:
     mov w10, DIR_LEFT
 
-/* if we go to the opposite direction the snake instantly dies */
+/* if we go to the opposite direction the snake was going it instantly dies */
 /* so we keep the one we had and loop to the other side to align */
 ai_decide_direction:
     adds wzr, w10, w9
     bne  ai_load_direction
 
-    neg w10, w10
+    b _ai_choose_path
 
 ai_load_direction:
     str w10, [x19, SNEK_DIRECTION_OFFSET]
