@@ -1,6 +1,5 @@
 .include "src/screen.s"
 .include "src/snek.s"
-.include "src/food.s"
 
 .equ RAND_SEED, 0x1EA7A55
 
@@ -23,8 +22,8 @@
     background:  .word  GB_LGREEN
     foreground:  .word  GB_DGREEN
     food_color:  .word  RED
-    food_x:      .word  12
-    food_y:      .word  4
+    food_x:      .word  16
+    food_y:      .word  6
     snek:
         .word DIR_UP
         .word GB_DGREEN
@@ -59,6 +58,69 @@ main:
     ldr w2, food_y
     ldr w3, food_color
     bl tiled_circle
+
+    adr x0, snek
+    mov x1, 9
+    mov x2, 4
+    bl snek_push
+
+    mov x0, x19
+    adr x1, snek
+    bl snek_draw_head
+
+    adr x0, snek
+    mov x1, 9
+    mov x2, 5
+    bl snek_push
+
+    mov x0, x19
+    adr x1, snek
+    bl snek_draw_head
+
+    adr x0, snek
+    mov x1, 9
+    mov x2, 6
+    bl snek_push
+
+    mov x0, x19
+    adr x1, snek
+    bl snek_draw_head
+
+    adr x0, snek
+    mov x1, 10
+    mov x2, 6
+    bl snek_push
+
+    mov x0, x19
+    adr x1, snek
+    bl snek_draw_head
+
+    adr x0, snek
+    mov x1, 11
+    mov x2, 6
+    bl snek_push
+
+    mov x0, x19
+    adr x1, snek
+    bl snek_draw_head
+
+    adr x0, snek
+    mov x1, 12
+    mov x2, 6
+    bl snek_push
+
+    mov x0, x19
+    adr x1, snek
+    bl snek_draw_head
+    
+    adr x0, snek
+    mov x1, 13
+    mov x2, 6
+    bl snek_push
+
+    mov x0, x19
+    adr x1, snek
+    bl snek_draw_head
 
 infloop:
     b infloop

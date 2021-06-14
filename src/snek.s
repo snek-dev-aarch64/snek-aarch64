@@ -154,46 +154,6 @@ _snek_push:
     ret
 
 /*
-    Subroutine: snek_pop
-
-    Brief:
-        Pop a coord pair from the snek
-
-    Params:
-        x0 - snek base address
-
-    Notes:
-        The snek array should not be empty
-*/
-snek_pop:
-    sub sp, sp, 12
-    str w19, [sp, 8]
-    str w20, [sp, 4]
-    str w21, [sp]
-
-    ldr w19, [x0, SNEK_SIZE_OFFSET]
-    sub w19, w19, 1
-    str w19, [x0, SNEK_SIZE_OFFSET]
-
-    ldr w19, [x0, SNEK_FRONT_OFFSET]
-    ldr w20, [x0, SNEK_CAPACITY_OFFSET]
-
-    /* FRONT = (FRONT + 1) % CAPACITY */
-    add  w19, w19, 1        /* FRONT = FRONT + 1 */
-    udiv w21, w19, w20      /* w21 = FRONT // CAPACITY */
-    msub w19, w21, w20, w19 /* FRONT = FRONT - (w21*CAPACITY) */
-
-    str w19, [x0, SNEK_FRONT_OFFSET]
-
-_snek_pop:
-    ldr w21, [sp]
-    ldr w20, [sp, 4]
-    ldr w19, [sp, 8]
-    add sp, sp, 12
-
-    ret
-
-/*
     Subroutine: snek_head
 
     Brief:
@@ -230,104 +190,39 @@ _snek_head:
     ret
 
 /*
-    Subroutine: snek_last
+    Subroutine: snek_draw_head
 
     Brief:
-        Return the 'tail' pair of the snek queue
+        Draw the head of the snek
 
     Params:
         x0 - snek base address
-
-    Return:
-        x1 - x pos
-        x2 - y pos
+        x1 - framebuffer
 */
-snek_last:
-    sub sp, sp, 8
-    str x19, [sp]
+snek_draw_head:
+    sub sp, sp, 24
+    str x19, [sp, 16]
+    str x20, [sp, 8]
+    str lr,  [sp]
 
-    ldr w19, [x0, SNEK_FRONT_OFFSET]
-    movk x19, 0, lsl 32
+    mov x19, x0
+    mov x20, x1
 
-    add x0, x0, SNEK_ARRAY_OFFSET
-
-    lsl x19, x19, 2
-    ldrh w1, [x0, x19]
-    add x19, x19, 2
-    ldrh w2, [x0, x19]
-
-    movk x1, 0, lsl 32
-    movk x2, 0, lsl 32
-
-_snek_last:
-    ldr x19, [sp]
-    add sp, sp, 8
-
-    ret
-
-/*
-    Subroutine: snek_is_ded
-
-    Brief:
-        Check if the snek is ded
-
-    Params:
-        x0 - snek base address
-
-    Returns:
-        x0 - 1 if true | 0 if false
-*/
-snek_is_ded:
-    sub sp, sp, 8
-    str lr, [sp]
-
-    ldr w9,  [x0, SNEK_SIZE_OFFSET]
-    ldr w10, [x0, SNEK_FRONT_OFFSET]
-    ldr w11, [x0, SNEK_CAPACITY_OFFSET]
-
-    sub w9, w9, 1
-
-    movk x9,  0, lsl 32
-    movk x10, 0, lsl 32
-    movk x11, 0, lsl 32
-
-    add x12, x0, SNEK_ARRAY_OFFSET
-
+    mov x0, x1
     bl snek_head
 
-    mov x0,  xzr
-    mov x13, xzr
-snek_is_ded_loop:
-    cmp x9, x13  /* i == size */
-    beq _snek_is_ded
+    mov x0, x19
+    ldr w3, [x20, SNEK_COLOR_OFFSET]
+    mov x4, SNEK_BLOCK_PADDING
+    bl block
 
-    add  x14, x13, x10      /* j = FRONT + i */
-    udiv x15, x14, x11      /* jtemp = j // CAPACITY */
-    msub x14, x15, x11, x14 /* j = (FRONT + i) % CAPACITY */
+_snek_draw_head:
+    ldr lr,  [sp]
+    ldr x20, [sp, 8]
+    ldr x19, [sp, 16]
+    add sp, sp, 24
 
-    lsl  x14, x14, 2
-    ldrh w15, [x12, x14]
-    cmp  w1, w15
-    bne  snek_is_ded_continue
-
-    add  x14, x14, 2
-    ldrh w15, [x12, x14]
-    cmp  w2, w15
-    beq  snek_is_deffinetly_ded
-
-snek_is_ded_continue:
-    add x13, x13, 1
-
-    b snek_is_ded_loop
-
-snek_is_deffinetly_ded:
-    mov x0, 1
-
-_snek_is_ded:
-    ldr lr, [sp]
-    add sp, sp, 8
-
-    ret
+    ret 
 
 /*
     Subroutine: draw_snek

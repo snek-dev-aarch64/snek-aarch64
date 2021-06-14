@@ -117,34 +117,6 @@ _block:
     ret
 
 /*
-    Subroutine: point
-
-    Brief:
-        Draw a block with padding=0px
-
-    Params:
-        x0 - framebuffer
-        x1 - x pos
-        x2 - y pos
-        w3 - color
-
-    Notes:
-        The point coords should be choosen from 0,0 to MAX_WIDTH,MAX_HEIGHT
-*/
-point:
-    sub sp, sp, 8
-    str lr,  [sp]
-
-    mov x4, xzr
-    bl block
-
-_point:
-    ldr lr,  [sp]
-    add sp, sp, 8
-
-    ret
-
-/*
     Subroutine: rect
 
     Brief:
