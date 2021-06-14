@@ -120,11 +120,11 @@ game_loop_snek_update:
     mov x0, x20
     bl snek_push
 
-    mov x0, x20
-    bl snek_head
-
     ldr w9,  food_x
     ldr w10, food_y
+
+    mov x0, x20
+    bl snek_head
 
     /* if snek in food generate new food and don't remove it's tail */
     cmp w1, w9
